@@ -190,7 +190,7 @@ async function login(){
   const errEl=document.getElementById('lerr');
   errEl.textContent='';
   if(!email||!password){errEl.textContent='Enter your email and password.';return}
-  if(SUPA_PUBLISHABLE==='sb_publishable_fSpBwgCHmiDJ87l8odfWNg_lxrKmJJD'){errEl.textContent='Add your Supabase Publishable key first.';return}
+  if(SUPA_PUBLISHABLE==='YOUR_SUPABASE_PUBLISHABLE_KEY'){errEl.textContent='Add your Supabase Publishable key first.';return}
   const btn=document.querySelector('.lbtn');btn.disabled=true;btn.textContent='Signing in…';
   const {error}=await db.auth.signInWithPassword({email,password});
   btn.disabled=false;btn.textContent='Sign in';

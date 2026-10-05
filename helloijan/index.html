@@ -314,6 +314,19 @@ footer{padding:2rem 3rem;display:flex;align-items:center;justify-content:space-b
 }
 .rm-print-btn:hover{border-color:var(--black);color:var(--black)}
 
+.visitor-count {
+  font-family: inherit;      /* uses your serif automatically */
+  font-size: 0.75rem;        /* same size as the copyright line, tweak as needed */
+  color: inherit;            /* same muted gray */
+  letter-spacing: 0.02em;
+  opacity: 0;                /* start invisible for fade-in */
+  transition: opacity 0.8s ease;
+}
+
+.visitor-count.is-ready {
+  opacity: 1;
+}
+
 /* PRINT STYLES */
 @media print{
   body *{visibility:hidden}
@@ -1116,26 +1129,45 @@ function sample(){
   ];
 }
 </script>
+
 <footer style="text-align:center; padding:24px; font-family:sans-serif; color:#666;">
-  <p>👀 Visitors: <span id="visitor-count">…</span></p>
+  <p>👀 : <span id="visitor-count">…</span></p>
 </footer>
 
 <script>
   (async () => {
     const el = document.getElementById('visitor-count');
+    const wrapper = el?.closest('.visitor-count');
     const isNew = !localStorage.getItem('hasVisited');
 
     try {
-      // If new visitor, hit the counter; otherwise just read it
       const url = '/api/counter' + (isNew ? '?hit=1' : '');
       const res = await fetch(url);
-      const data = await res.json();
-      el.textContent = data.count.toLocaleString();
+      const { count } = await res.json();
 
       if (isNew) localStorage.setItem('hasVisited', 'true');
+
+      // Fade in the wrapper
+      wrapper?.classList.add('is-ready');
+
+      // Gentle count-up animation
+      const duration = 900;       // ms
+      const start = performance.now();
+      const from = 0;
+      const to = count;
+
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        // ease-out cubic — smooth deceleration
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(from + (to - from) * eased).toLocaleString();
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
     } catch (err) {
+      wrapper?.classList.add('is-ready');
       el.textContent = '—';
-      console.error('Counter failed:', err);
     }
   })();
 </script>
