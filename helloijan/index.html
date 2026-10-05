@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HelloIjan — Art Director & Designer</title>
+<meta name="description" content="Senior Art Director with 20+ years across branding, digital, motion and photography."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0d0d0d;--white:#fafaf7;
+  --g100:#f3f2ef;--g200:#e6e5e1;--g400:#aeada7;--g600:#6b6a65;
+  --accent:#b8966a;--serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--white);color:var(--black);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s}
+nav.scrolled{background:rgba(250,250,247,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--g200)}
+.nav-logo{font-family:var(--serif);font-size:1.4rem;font-weight:300;letter-spacing:.06em;color:var(--white);text-decoration:none;transition:color .4s}
+nav.scrolled .nav-logo{color:var(--black)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75);text-decoration:none;transition:color .25s}
+.nav-links a:hover{color:#fff}
+nav.scrolled .nav-links a{color:var(--g600)}
+nav.scrolled .nav-links a:hover{color:var(--black)}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--white);transition:background .4s}
+nav.scrolled .nav-hamburger span{background:var(--black)}
+
+/* HERO */
+.hero{position:relative;height:100vh;overflow:hidden;background:var(--black)}
+.hero-slides{position:relative;width:100%;height:100%}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1s var(--ease);display:flex;align-items:flex-end}
+.hero-slide.active{opacity:1;z-index:1}
+.hero-slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 8s linear}
+.hero-slide.active .hero-slide-bg{transform:scale(1.06)}
+.hero-slide::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(13,13,13,.85) 0%,rgba(13,13,13,.25) 55%,transparent 100%)}
+.hero-content{position:relative;z-index:2;padding:4rem 3rem;max-width:680px}
+.hero-eyebrow{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.1rem}
+.hero-title{font-family:var(--serif);font-size:clamp(2.6rem,6vw,5.2rem);font-weight:300;color:#fff;line-height:1.06;margin-bottom:1.2rem}
+.hero-desc{font-size:.875rem;color:rgba(255,255,255,.6);line-height:1.8;max-width:400px;margin-bottom:2rem}
+.hero-cta{display:inline-flex;align-items:center;gap:.75rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:.25rem;transition:gap .3s,border-color .3s}
+.hero-cta::after{content:'→'}
+.hero-cta:hover{gap:1.25rem;border-color:#fff}
+.hero-nav{position:absolute;bottom:2.5rem;right:3rem;z-index:10;display:flex;align-items:center;gap:1rem}
+.hero-dots{display:flex;gap:.5rem}
+.hdot{width:28px;height:2px;background:rgba(255,255,255,.25);border:none;cursor:pointer;padding:0;transition:width .3s,background .3s}
+.hdot.on{width:52px;background:#fff}
+.hero-count{font-size:.68rem;color:rgba(255,255,255,.4);letter-spacing:.1em;min-width:44px;text-align:right}
+
+/* SECTIONS */
+section{padding:7rem 3rem}
+.sec-head{display:flex;align-items:baseline;gap:1.75rem;margin-bottom:3.5rem}
+.sec-eyebrow{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--g400);white-space:nowrap}
+.sec-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:300;line-height:1.08}
+.sec-line{flex:1;height:1px;background:var(--g200)}
+
+/* MORE LINKS */
+.ext-link-card{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem 1.5rem;background:var(--white);
+  border:1px solid var(--g200);text-decoration:none;
+  transition:background .2s,border-color .2s;
+}
+.ext-link-card:hover{background:var(--g100);border-color:var(--g400)}
+.elc-cat{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+.elc-title{font-size:.95rem;font-weight:500;color:var(--black);margin-bottom:.2rem}
+.elc-desc{font-size:.78rem;color:var(--g600)}
+.elc-arrow{font-size:1rem;color:var(--g400);flex-shrink:0;margin-left:1.5rem;transition:color .2s}
+.ext-link-card:hover .elc-arrow{color:var(--black)}
+@media(max-width:640px){.ext-link-card{grid-column:1/-1}}
+
+/* FILTERS */
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:3rem}
+.fbtn{font-family:var(--sans);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.45rem 1.1rem;border:1px solid var(--g200);background:transparent;color:var(--g600);cursor:pointer;transition:all .2s}
+.fbtn:hover{border-color:var(--black);color:var(--black)}
+.fbtn.on{background:var(--black);color:#fff;border-color:var(--black)}
+
+/* TAGS */
+.proj-tags,.gtags,.lb-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.9rem}
+.proj-tag{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);background:rgba(184,150,106,.08);border:1px solid rgba(184,150,106,.22);padding:.18rem .55rem}
+.gtag{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.lb-tag{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(184,150,106,.3);padding:.18rem .5rem}
+
+/* FEATURED PROJECT */
+.feat{display:grid;grid-template-columns:1.35fr 1fr;cursor:pointer;overflow:hidden;margin-bottom:3px}
+.feat-media{aspect-ratio:16/9;overflow:hidden;background:var(--g100);position:relative}
+.feat-media img,.feat-media video{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease);display:block}
+.feat:hover .feat-media img,.feat:hover .feat-media video{transform:scale(1.05)}
+.feat-info{padding:3rem 3.5rem;background:var(--g100);display:flex;flex-direction:column;justify-content:center;border-left:2px solid var(--g200)}
+.proj-title{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.6rem);font-weight:300;line-height:1.1;margin-bottom:1rem}
+.proj-desc{font-size:.875rem;color:var(--g600);line-height:1.75;margin-bottom:2rem}
+.proj-link{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--black);text-decoration:none;border-bottom:1px solid var(--black);padding-bottom:.2rem;display:inline-block;transition:opacity .2s}
+.proj-link:hover{opacity:.45}
+
+/* GRID */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:3px}
+.gitem{position:relative;overflow:hidden;background:var(--g100);cursor:pointer;aspect-ratio:4/3}
+.gitem img,.gitem video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s var(--ease)}
+.gitem:hover img,.gitem:hover video{transform:scale(1.07)}
+.goverlay{position:absolute;inset:0;background:rgba(13,13,13,0);padding:1.25rem;display:flex;flex-direction:column;justify-content:flex-end;transition:background .35s}
+.gitem:hover .goverlay{background:rgba(13,13,13,.58)}
+.ginfo{transform:translateY(6px);opacity:0;transition:all .35s}
+.gitem:hover .ginfo{transform:none;opacity:1}
+.gtitle{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:#fff;line-height:1.2}
+
+/* LOAD MORE */
+.lm-wrap{text-align:center;padding:2.5rem 0 0}
+.lm-btn{font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2.5rem;background:transparent;color:var(--black);border:1px solid var(--g200);cursor:pointer;transition:all .25s}
+.lm-btn:hover{border-color:var(--black)}
+
+/* EMPTY */
+.empty{text-align:center;padding:5rem;color:var(--g400);grid-column:1/-1}
+.empty p{font-family:var(--serif);font-size:1.5rem;font-weight:300}
+
+/* ABOUT */
+.about-sec{background:var(--black);color:#fff}
+.about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:center}
+.about-img{aspect-ratio:1/1;overflow:hidden;background:var(--g600)}
+.about-img img{width:100%;height:100%;object-fit:cover;display:block}
+.about-eyebrow{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem}
+.about-name{font-family:var(--serif);font-size:clamp(2.5rem,5vw,4rem);font-weight:300;line-height:1.04;margin-bottom:1.75rem}
+.about-body{font-size:.9rem;color:rgba(255,255,255,.6);line-height:1.9;margin-bottom:2rem}
+.about-body p+p{margin-top:1.1rem}
+.about-open{display:inline-block;margin-top:.5rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(184,150,106,.4);padding:.6rem 1.5rem;text-decoration:none;cursor:pointer;background:transparent;font-family:var(--sans);transition:all .25s}
+.about-open:hover{background:var(--accent);color:var(--black);border-color:var(--accent)}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;margin-top:2rem}
+.stat-n{font-family:var(--serif);font-size:2.5rem;font-weight:300}
+.stat-l{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:.2rem}
+
+/* CONTACT — ANIMATED HEADLINE */
+.contact-sec{background:var(--g100)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+.ct-wrap{
+  position:relative;overflow:hidden;height:7.5rem;margin-bottom:1.5rem;
+}
+.ct-line{
+  font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:300;line-height:1.12;
+  position:absolute;top:0;left:0;width:100%;
+  opacity:0;transform:translateX(-40px);
+  transition:opacity .55s var(--ease),transform .55s var(--ease);
+  pointer-events:none;
+}
+.ct-line.in{opacity:1;transform:none;pointer-events:auto}
+.ct-line.out{opacity:0;transform:translateX(40px)}
+.contact-email{font-family:var(--serif);font-size:1.15rem;color:var(--g600);margin-bottom:2.5rem}
+.socials{display:flex;gap:1.5rem;flex-wrap:wrap}
+.slink{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--g600);text-decoration:none;border-bottom:1px solid var(--g400);padding-bottom:.15rem;transition:color .2s,border-color .2s}
+.slink:hover{color:var(--black);border-color:var(--black)}
+.cform{display:flex;flex-direction:column;gap:1.2rem}
+.flabel{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--g400);display:block;margin-bottom:.4rem}
+.finput{font-family:var(--sans);font-size:.9rem;padding:.8rem 0;background:transparent;border:none;border-bottom:1px solid var(--g200);outline:none;color:var(--black);width:100%;transition:border-color .25s}
+.finput:focus{border-color:var(--black)}
+textarea.finput{resize:none;height:100px}
+.fsubmit{font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.95rem 2.5rem;background:var(--black);color:#fff;border:none;cursor:pointer;align-self:flex-start;margin-top:.5rem;transition:opacity .2s}
+.fsubmit:hover{opacity:.75}
+
+/* LIGHTBOX / PROJECT VIEWER */
+.lb{position:fixed;inset:0;z-index:1000;background:rgba(13,13,13,.97);opacity:0;pointer-events:none;transition:opacity .35s;display:flex;align-items:center;justify-content:center}
+.lb.open{opacity:1;pointer-events:all}
+.lb-close{position:absolute;top:1.5rem;right:2.5rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.48);cursor:pointer;background:none;border:none;transition:color .2s;z-index:5}
+.lb-close:hover{color:#fff}
+.lb-inner{display:grid;grid-template-columns:1.45fr 1fr;gap:3rem;align-items:center;max-width:1180px;width:88%;max-height:78vh}
+.lb-media{background:#111;min-height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lb-media img,.lb-media video{width:100%;max-height:72vh;object-fit:contain;display:block}
+.lb-side{min-width:0}
+.lb-project-count{font-size:.62rem;letter-spacing:.16em;color:rgba(255,255,255,.38);margin-bottom:1rem;text-transform:uppercase}
+.lb-title{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:#fff;line-height:1.08;margin-bottom:1.25rem}
+.lb-desc{font-size:.875rem;color:rgba(255,255,255,.52);line-height:1.8}
+.lb-thumbs{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.5rem;max-height:150px;overflow:auto;padding-bottom:2px}
+.lb-thumb{width:68px;height:68px;object-fit:cover;cursor:pointer;opacity:.4;transition:opacity .2s,border-color .2s; border:1px solid transparent;background:#111;flex:0 0 auto}
+.lb-thumb:hover,.lb-thumb.on{opacity:1;border-color:rgba(255,255,255,.7)}
+.lb-thumb img,.lb-thumb video{width:100%;height:100%;object-fit:cover;display:block;margin:0;padding:0}
+.lb-thumb-wrap{position:relative;width:68px;height:68px;flex:0 0 auto}
+.lb-thumb-wrap .lb-thumb{width:100%;height:100%}
+.lb-thumb-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;pointer-events:none;text-shadow:0 1px 5px #000}
+.lb-nav{position:absolute;inset:0;pointer-events:none}
+.lb-nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(13,13,13,.45);color:#fff;cursor:pointer;font-size:1.15rem;display:flex;align-items:center;justify-content:center;pointer-events:all;transition:background .2s,border-color .2s,opacity .2s;z-index:4}
+.lb-nav-btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.45)}
+.lb-nav-prev{left:1.5rem}.lb-nav-next{right:1.5rem}
+.lb-project-nav{position:absolute;left:50%;bottom:1.25rem;transform:translateX(-50%);width:min(1180px,88%);display:flex;justify-content:space-between;align-items:center;padding-top:.85rem;border-top:1px solid rgba(255,255,255,.12);gap:1rem}
+.lb-project-btn{border:0;background:none;color:rgba(255,255,255,.5);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:.4rem 0;transition:color .2s;white-space:nowrap}
+.lb-project-btn:hover{color:#fff}
+.lb-project-btn:disabled{opacity:.18;cursor:default}
+.lb-project-position{font-size:.62rem;letter-spacing:.12em;color:rgba(255,255,255,.3);text-transform:uppercase}
+
+/* FOOTER */
+footer{padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--g200)}
+.ft-brand{font-family:var(--serif);font-size:.9rem;color:var(--g400)}
+.ft-copy{font-size:.68rem;color:var(--g400);letter-spacing:.06em}
+
+/* ── RESUME MODAL ─────────────────────────────── */
+.rm-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(13,13,13,.88);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s var(--ease);
+  padding:2rem;
+}
+.rm-overlay.open{opacity:1;pointer-events:all}
+.rm-modal{
+  background:#fff;width:100%;max-width:820px;
+  max-height:90vh;overflow-y:auto;position:relative;
+  animation:rmIn .4s var(--ease) both;
+}
+@keyframes rmIn{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+
+.rm-close{
+  position:sticky;top:0;z-index:10;
+  display:flex;justify-content:flex-end;
+  padding:.75rem 1rem .5rem;background:#fff;
+}
+.rm-close-btn{
+  font-family:var(--sans);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--g400);background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:.5rem;transition:color .2s;
+}
+.rm-close-btn:hover{color:var(--black)}
+.rm-body{padding:2rem 3rem 2rem}
+
+/* Resume header — photo + info side by side */
+.rm-header{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:2rem;
+  align-items:center;
+  padding-bottom:1.75rem;
+  margin-bottom:1.75rem;
+  border-bottom:1px solid var(--g200);
+}
+.rm-photo{
+  width:120px;height:120px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid var(--g200);
+  flex-shrink:0;
+}
+.rm-photo img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  display:block;
+}
+.rm-header-info{}
+.rm-name{font-family:var(--serif);font-size:2.4rem;font-weight:300;letter-spacing:.02em;line-height:1;color:var(--black);margin-bottom:.35rem}
+.rm-role{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.rm-contacts{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem}
+.rm-contact-item{font-size:.75rem;color:var(--g600);display:flex;align-items:center;gap:.35rem}
+.rm-contact-item a{color:var(--g600);text-decoration:none;transition:color .2s}
+.rm-contact-item a:hover{color:var(--black)}
+
+.rm-contact-item img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 6px; /* spacing with text */
+}
+
+.rm-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Two-column body */
+.rm-cols{display:grid;grid-template-columns:1fr 2fr;gap:2.5rem}
+.rm-sec-label{
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1.1rem;padding-bottom:.5rem;
+  border-bottom:1px solid rgba(184,150,106,.25);display:block;
+}
+.rm-summary{font-size:.85rem;color:var(--g600);line-height:1.8;margin-bottom:1.5rem}
+.rm-skill-group{margin-bottom:1.25rem}
+.rm-skill-title{font-size:.72rem;font-weight:500;color:var(--black);margin-bottom:.5rem;letter-spacing:.04em}
+.rm-skill-list{display:flex;flex-wrap:wrap;gap:.35rem}
+.rm-skill{font-size:.68rem;background:var(--g100);color:var(--g600);padding:.22rem .65rem;letter-spacing:.04em}
+.rm-exp{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--g100)}
+.rm-exp:last-child{border-bottom:none;padding-bottom:0}
+.rm-exp-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.2rem;flex-wrap:wrap}
+.rm-exp-title{font-family:var(--serif);font-size:1.05rem;font-weight:400;color:var(--black);line-height:1.2}
+.rm-exp-date{font-size:.68rem;color:var(--g400);letter-spacing:.08em;white-space:nowrap}
+.rm-exp-company{font-size:.75rem;color:var(--accent);letter-spacing:.06em;margin-bottom:.08rem}
+.rm-exp-loc{font-size:.7rem;color:var(--g400);margin-bottom:.65rem}
+.rm-exp-pts{padding-left:1rem;margin:0}
+.rm-exp-pts li{font-size:.8rem;color:var(--g600);line-height:1.7;margin-bottom:.2rem}
+.rm-exp-pts li::marker{color:var(--accent)}
+.rm-edu{margin-bottom:1rem}
+.rm-edu-deg{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--black);line-height:1.25;margin-bottom:.25rem}
+.rm-edu-school{font-size:.75rem;color:var(--accent)}
+.rm-edu-year{font-size:.7rem;color:var(--g400)}
+.rm-note{font-family:var(--serif);font-size:.95rem;font-style:italic;color:var(--g400);line-height:1.7;margin-top:.75rem;padding-top:1rem;border-top:1px solid var(--g200)}
+.rm-actions{
+  position:sticky;bottom:0;background:#fff;border-top:1px solid var(--g200);
+  padding:1rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.rm-dl-btn{
+  font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.8rem 2rem;background:var(--black);color:#fff;
+  border:none;cursor:pointer;display:flex;align-items:center;gap:.65rem;transition:opacity .2s;
+}
+.rm-dl-btn:hover{opacity:.8}
+.rm-dl-btn::before{content:'↓';font-size:.9rem}
+.rm-print-btn{
+  font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.8rem 1.5rem;background:transparent;color:var(--g600);
+  border:1px solid var(--g200);cursor:pointer;transition:all .2s;
+}
+.rm-print-btn:hover{border-color:var(--black);color:var(--black)}
+
+/* PRINT STYLES */
+@media print{
+  body *{visibility:hidden}
+  .rm-printable,.rm-printable *{visibility:visible}
+  .rm-printable{position:fixed;inset:0;background:#fff;z-index:9999;padding:1.5cm}
+  .rm-close,.rm-actions{display:none!important}
+  .rm-modal{max-height:none;overflow:visible}
+  .rm-photo{width:90px;height:90px}
+  .rm-name{font-size:1.8rem}
+}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  nav{padding:1.25rem 1.5rem}
+  .nav-links,.nav-links.open{display:none;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--black);align-items:center;justify-content:center;gap:2rem;z-index:199}
+  .nav-links.open{display:flex}
+  .nav-links a{font-size:1.2rem;color:rgba(255,255,255,.8)}
+  .nav-hamburger{display:flex}
+  section{padding:5rem 1.5rem}
+  .feat,.about-grid,.contact-grid,.lb-inner{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .hero-content{padding:3rem 1.5rem}
+  .hero-nav{right:1.5rem}
+  .feat-info{padding:2rem 1.5rem}
+  .rm-body,.rm-actions{padding-left:1.5rem;padding-right:1.5rem}
+  .rm-cols{grid-template-columns:1fr}
+  .rm-name{font-size:1.8rem}
+  .rm-header{grid-template-columns:90px 1fr;gap:1.25rem}
+  .rm-photo{width:90px;height:90px}
+  .ct-wrap{height:10rem}
+}
+@media(max-width:960px){
+  .lb{align-items:stretch;flex-direction:column;overflow-y:auto;padding:4.5rem 1rem 2rem}
+  .lb-inner{width:100%;max-height:none;grid-template-columns:1fr;gap:1.5rem;align-items:start}
+  .lb-media{min-height:0}
+  .lb-media img,.lb-media video{max-height:58vh}
+  .lb-side{padding:0 .5rem 1rem}
+  .lb-title{font-size:2rem}
+  .lb-nav-btn{width:40px;height:40px}
+  .lb-nav-prev{left:.75rem}.lb-nav-next{right:.75rem}
+  .lb-project-nav{position:static;transform:none;width:100%;margin-top:1.5rem}
+}
+@media(max-width:560px){
+  .lb{padding:4rem .75rem 1.25rem}
+  .lb-close{top:1.15rem;right:1rem}
+  .lb-inner{gap:1rem}
+  .lb-media img,.lb-media video{max-height:52vh}
+  .lb-title{font-size:1.75rem}
+  .lb-desc{font-size:.82rem}
+  .lb-thumb,.lb-thumb-wrap{width:58px;height:58px}
+  .lb-nav-btn{top:30%;width:36px;height:36px;font-size:1rem}
+  .lb-nav-prev{left:.35rem}.lb-nav-next{right:.35rem}
+  .lb-project-btn{font-size:.58rem}
+  .lb-project-position{font-size:.56rem}
+}
+@media(max-width:560px){
+  .pgrid{grid-template-columns:1fr}
+  .rm-header{grid-template-columns:1fr;text-align:center}
+  .rm-photo{width:100px;height:100px;margin:0 auto}
+  .rm-contacts{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="nav-logo" href="#">HelloIjan</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#work" onclick="closeNav()">Work</a></li>
+    <li><a href="#about" onclick="closeNav()">About</a></li>
+    <li><a href="#contact" onclick="closeNav()">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide active">
+      <div class="hero-slide-bg" style="background-color:#1a1a1a"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">Art Direction · Design · Photography</div>
+        <h1 class="hero-title">HelloIjan</h1>
+      </div>
+    </div>
+  </div>
+  <div class="hero-nav">
+    <div class="hero-dots" id="heroDots"></div>
+    <div class="hero-count" id="heroCount"></div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<section id="work">
+  <div class="sec-head">
+    <span class="sec-eyebrow">Selected Work</span>
+    <h2 class="sec-title">Portfolio</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="filters" id="filters">
+    <button class="fbtn on" onclick="filter('all',this)">All</button>
+    <button class="fbtn" onclick="filter('Video',this)">Video</button>
+    <button class="fbtn" onclick="filter('Key Visual',this)">Key Visual</button>
+    <button class="fbtn" onclick="filter('Photography',this)">Photography</button>
+    <button class="fbtn" onclick="filter('Social Media',this)">Social Media</button>
+    <button class="fbtn" onclick="filter('3D',this)">3D</button>
+    <button class="fbtn" onclick="filter('Website',this)">Website</button>
+    <button class="fbtn" onclick="filter('Events',this)">Events</button>
+    <button class="fbtn" onclick="filter('Print',this)">Print</button>
+  </div>
+  <div id="featArea"></div>
+  <div class="pgrid" id="gridArea"></div>
+  <div class="lm-wrap" id="lmWrap" style="display:none">
+    <button class="lm-btn" id="lmBtn" onclick="loadMore()">Load More Work</button>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-sec" id="about">
+  <div class="about-grid">
+    <div class="about-img">
+      <img src="https://zvmjbgdldlltnsewdzkf.supabase.co/storage/v1/object/public/portfolio-media/uploads/1785728488798-my-pic.jpg" alt="Ijan — Art Director" loading="lazy"/>
+    </div>
+    <div>
+      <div class="about-eyebrow">Creative Freelancer, Digital Art Director & Visual Storyteller</div>
+      <h2 class="about-name">Hello there!<br/>I'm Ijan.</h2>
+      <div class="about-body">
+        <p>With over two decades of experience in the creative industry, I've built a career that spans Multimedia designer, Web designer, Senior graphic designer, Digital Art director, and leadership as Vice President of Graphic & Media. Today, I work independently as a creative freelancer — turning bold ideas into memorable visual experiences.</p>
+        <p>I've had the privilege of collaborating with teams across media, broadcast entertainment, education, advertising, and corporate sectors. My work includes brand identity development, social media content creation, event design, website development, and high-impact visual storytelling.</p>
+        <p>Beyond design, I'm an active contributor to the global stock photography market. My work is available on Adobe Stock, Getty Images, Dreamstime, and Shutterstock, and has been featured by major brands including Digi, AmBank, Malaysia Airlines, Harvey Norman, Kentico, CIMB Bank and many more.</p>
+        <p>When I'm not designing or shooting, you'll find me cycling trails, flying my drone, or simply staying curious — finding inspiration in movement, light, and the world around me. Because for me, creativity never clocks out.</p>
+      </div>
+      <button class="about-open" onclick="openResume()">I'm open for hiring — View Resume</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-sec" id="contact">
+  <div class="contact-grid">
+    <div>
+      <div class="ct-wrap" id="ctWrap">
+        <div class="ct-line in" id="ct0">Creative. Leader. Maker.</div>
+        <div class="ct-line" id="ct1">Art that connects. Design that converts.</div>
+        <div class="ct-line" id="ct2">Visionary Art Director. Hands-On Creative.</div>
+        <div class="ct-line" id="ct3">Make it simple. Make it memorable. Make it beautiful.</div>
+        <div class="ct-line" id="ct4">I don't just design. I bring ideas to life.</div>
+      </div>
+      <p class="contact-email">Find me at:</p>
+      <div class="socials">
+        <a class="slink" href="https://www.instagram.com/helloijan/" target="_blank">Instagram</a>
+        <a class="slink" href="https://www.linkedin.com/in/ijansempoi/" target="_blank">LinkedIn</a>
+        <a class="slink" href="https://www.behance.net/TheRonen" target="_blank">Behance</a>
+        <a class="slink" href="https://www.youtube.com/ijansempoi" target="_blank">YouTube</a>
+      </div>
+      <div style="margin-top:2rem">
+        <iframe style="border-radius:8px" src="https://open.spotify.com/embed/album/4icdcQxyy2hCQkRStkA5pf?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </div>
+    <form class="cform" id="contactForm" onsubmit="submitContact(event)">
+      <div><label class="flabel">Name</label><input class="finput" id="cName" type="text" required placeholder="Your name"/></div>
+      <div><label class="flabel">Email</label><input class="finput" id="cEmail" type="email" required placeholder="your@email.com"/></div>
+      <div><label class="flabel">Message</label><textarea class="finput" id="cMsg" required placeholder="Tell me about your project…"></textarea></div>
+      <button class="fsubmit" type="submit" id="fsubmitBtn">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- LINKS 
+<section id="links" style="background:var(--g100);padding:7rem 3rem">
+  <div class="sec-head">
+    <span class="sec-eyebrow">Beyond Design</span>
+    <h2 class="sec-title">More from Ijan</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px">
+    <a href="https://tinyurl.com/mpvrwdyn" target="_blank" rel="noopener" class="ext-link-card">
+      <div><div class="elc-cat">Books</div><div class="elc-title">Buy My Book</div><div class="elc-desc">Available on Amazon</div></div>
+      <span class="elc-arrow">↗</span>
+    </a>
+    <a href="https://www.teepublic.com/user/the-daily-t-shirt" target="_blank" rel="noopener" class="ext-link-card">
+      <div><div class="elc-cat">Merchandise</div><div class="elc-title">T-Shirt Designs</div><div class="elc-desc">Shop on TeePublic</div></div>
+      <span class="elc-arrow">↗</span>
+    </a>
+    <a href="https://www.pasarkamera.com" target="_blank" rel="noopener" class="ext-link-card">
+      <div><div class="elc-cat">Camera Gear</div><div class="elc-title">Sell Your Unused Gear</div><div class="elc-desc">Pasarkamera.com</div></div>
+      <span class="elc-arrow">↗</span>
+    </a>
+    <a href="https://open.spotify.com/artist/4Wj4asXnBNcUC7RLGOjaRh?si=TbSJ9elFQSavoi7XFGLO_A" target="_blank" rel="noopener" class="ext-link-card">
+      <div><div class="elc-cat">Music</div><div class="elc-title">Stream My Music</div><div class="elc-desc">Listen on Spotify</div></div>
+      <span class="elc-arrow">↗</span>
+    </a>
+    <a href="https://www.shutterstock.com/g/ijansempoi" target="_blank" rel="noopener" class="ext-link-card">
+      <div><div class="elc-cat">Photography</div><div class="elc-title">Buy Stock Photo</div><div class="elc-desc">Shutterstock</div></div>
+      <span class="elc-arrow">↗</span>
+    </a>
+    <a href="https://www.123rf.com/profile_ronen" target="_blank" rel="noopener" class="ext-link-card">
+      <div><div class="elc-cat">Photography</div><div class="elc-title">Buy Stock Photo</div><div class="elc-desc">123RF Stock</div></div>
+      <span class="elc-arrow">↗</span>
+    </a>
+  </div>
+</section>
+-->
+<footer>
+  <span class="ft-brand">HelloIjan — Digital Art Director</span>
+  <span class="ft-copy">© 2026. All rights reserved.</span>
+</footer>
+
+<!-- PROJECT VIEWER -->
+<div class="lb" id="lb">
+  <button class="lb-close" onclick="closeLb()">✕ Close</button>
+  <div class="lb-nav" aria-hidden="true">
+    <button class="lb-nav-btn lb-nav-prev" id="lbPrevMedia" onclick="event.stopPropagation();prevMedia()" aria-label="Previous image">←</button>
+    <button class="lb-nav-btn lb-nav-next" id="lbNextMedia" onclick="event.stopPropagation();nextMedia()" aria-label="Next image">→</button>
+  </div>
+  <div class="lb-inner">
+    <div class="lb-media" id="lbMedia"></div>
+    <div class="lb-side">
+      <div class="lb-project-count" id="lbProjectCount"></div>
+      <div class="lb-tags" id="lbTags"></div>
+      <div class="lb-title" id="lbTitle"></div>
+      <div class="lb-desc" id="lbDesc"></div>
+      <div class="lb-thumbs" id="lbThumbs"></div>
+    </div>
+  </div>
+  <div class="lb-project-nav">
+    <button class="lb-project-btn" id="lbPrevProject" onclick="prevProject()">← Previous Project</button>
+    <span class="lb-project-position" id="lbProjectPosition"></span>
+    <button class="lb-project-btn" id="lbNextProject" onclick="nextProject()">Next Project →</button>
+  </div>
+</div>
+
+<!-- ══ RESUME MODAL ══════════════════════════════════════════ -->
+<div class="rm-overlay" id="rmOverlay" onclick="handleOverlayClick(event)">
+  <div class="rm-modal rm-printable" id="rmModal">
+
+    <div class="rm-close">
+      <button class="rm-close-btn" onclick="closeResume()">✕ &nbsp;Close</button>
+    </div>
+
+    <div class="rm-body">
+
+      <!-- Header: photo + info -->
+      <div class="rm-header">
+        <div class="rm-photo">
+          <img
+            src="https://zvmjbgdldlltnsewdzkf.supabase.co/storage/v1/object/public/portfolio-media/uploads/1776698289176-profile-pic-bnw.png"
+            alt="Rosmizan Abu Seman"
+          />
+        </div>
+        <div class="rm-header-info">
+          <div class="rm-name">ROSMIZAN ABU SEMAN</div>
+          <div class="rm-role">Digital Art Director &amp; Creative Designer</div>
+          <div class="rm-contacts">
+            <span class="rm-contact-item"><img src="https://zvmjbgdldlltnsewdzkf.supabase.co/storage/v1/object/public/portfolio-media/uploads/1776828529315-location.png" /> Subang Jaya, Selangor </span>
+            <span class="rm-contact-item"><img src="https://zvmjbgdldlltnsewdzkf.supabase.co/storage/v1/object/public/portfolio-media/uploads/1776828529038-calling.png" /> <a href="tel:+60123843021">+60 12-384 3021</a></span>
+            <span class="rm-contact-item"><img src="https://zvmjbgdldlltnsewdzkf.supabase.co/storage/v1/object/public/portfolio-media/uploads/1776828529726-mail.png" /> <a href="mailto:Helloijan888@gmail.com">Helloijan888@gmail.com</a></span>
+            <span class="rm-contact-item"><img src="https://zvmjbgdldlltnsewdzkf.supabase.co/storage/v1/object/public/portfolio-media/uploads/1776828528742-internet.png" /> <a href="https://helloijan.netlify.app" target="_blank">helloijan.netlify.app</a></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <span class="rm-sec-label">Professional Summary</span>
+<p class="rm-summary">Seasoned creative professional with over two decades of experience  in the creative industry, I've built a career that spans multimedia designer, web designer, senior graphic designer, digital art director, and leadership as Vice President of Graphic & Media. Equally comfortable leading teams or working independently at the keyboard. I've had the privilege of collaborating with teams across corporate sectors, education, broadcast & entertainment and advertising agency. <br> <br>My work includes Broadcast creative design, brand identity development, social media content creation, event design, website development, UI/UX, video production (shooting & editing) and high-impact visual storytelling. Every project is an opportunity to solve creative challenges with purpose, precision, and passion. Beyond design, I'm an active contributor to the global stock photography market. My work is available on Adobe Stock, Getty Images, Dreamstime, and Shutterstock, and has been used by major brands including Digi, AmBank, Malaysia Airlines, Kentico, Harvey Norman and more. When I'm not designing or shooting, you'll find me cycling trails, flying my drone, or simply staying curious finding inspiration in movement, light, and the world around me. Because for me, creativity never clocks out.</p>
+      <div class="rm-cols">
+
+        <!-- LEFT: Skills + Education -->
+        <div>
+          <span class="rm-sec-label">Core Skills</span>
+
+          <div class="rm-skill-group">
+            <div class="rm-skill-title">Creative & Leadership</div>
+            <div class="rm-skill-list">
+              <span class="rm-skill">Art Direction</span>
+              <span class="rm-skill">Creative Strategy</span>
+              <span class="rm-skill">Team Leadership</span>
+              <span class="rm-skill">Mentoring</span>
+              <span class="rm-skill">Campaign Conceptualisation</span>
+              <span class="rm-skill">Key Visual Design</span>
+              <span class="rm-skill">Branding</span>
+            </div>
+          </div>
+
+          <div class="rm-skill-group">
+            <div class="rm-skill-title">Digital & Tools</div>
+            <div class="rm-skill-list">
+              <span class="rm-skill">Adobe CC</span>
+              <span class="rm-skill">Photoshop</span>
+              <span class="rm-skill">Illustrator</span>
+              <span class="rm-skill">A.i Prompter</span>
+              <span class="rm-skill">Premiere Pro</span>
+              <span class="rm-skill">After Effects</span>
+              <span class="rm-skill">Lightroom</span>
+              <span class="rm-skill">Final Cut Pro X</span>
+              <span class="rm-skill">Blender 3D</span>
+              <span class="rm-skill">WordPress</span>
+              <span class="rm-skill">HTML5/CSS3</span>
+              <span class="rm-skill">Bootstrap</span>
+              <span class="rm-skill">Kentico</span>
+              <span class="rm-skill">UI/UX</span>
+              <span class="rm-skill">Motion Graphics</span>
+              <span class="rm-skill">Digital Marketing</span>
+              <span class="rm-skill">CapCut</span>
+              <span class="rm-skill">SketchUp 3D</span>
+              <span class="rm-skill">Print Collateral</span>
+            </div>
+          </div>
+
+          <div class="rm-skill-group">
+            <div class="rm-skill-title">Production</div>
+            <div class="rm-skill-list">
+              <span class="rm-skill">Videography</span>
+              <span class="rm-skill">Drone Cinematography</span>
+              <span class="rm-skill">Photography</span>
+              <span class="rm-skill">Video Editing</span>
+              <span class="rm-skill">Broadcast Design</span>
+              <span class="rm-skill">Event & Exhibition Design</span>
+              <span class="rm-skill">Virtual News Studio</span>
+            </div>
+          </div>
+
+          <div style="margin-top:2rem">
+            <span class="rm-sec-label">Education</span>
+            <div class="rm-edu">
+              <div class="rm-edu-deg">Bachelor of Art and Design<br/><em style="font-weight:300;font-style:normal">Major in Graphic Design</em></div>
+              <div class="rm-edu-school">Universiti Teknologi MARA (UiTM)</div>
+              <div class="rm-edu-year">1999</div>
+            </div>
+          </div>
+
+          <div class="rm-note">
+            "Creative soul obsessed with beautifully crafted design. When not designing, avid cyclist and drone pilot."
+          </div>
+        </div>
+
+        <!-- RIGHT: Experience -->
+        <div>
+          <span class="rm-sec-label">Professional Experience</span>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Freelance Creative Director</div>
+              <div class="rm-exp-date">2025 – Present</div>
+            </div>
+            <div class="rm-exp-company">Helloijan</div>
+            <div class="rm-exp-loc">Putra Heights, Selangor</div>
+            <ul class="rm-exp-pts">
+              <li>Graphic design services</li>
+              <li>Photography, videography and drone cinematography</li>
+              <li>Social media content creation and strategy</li>
+              <li>Video editing and post-production</li>
+              <li>Website development services</li>
+              <li>Digital & Print</li>
+            </ul>
+          </div>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Senior Graphic Designer</div>
+              <div class="rm-exp-date">2024 – 2025</div>
+            </div>
+            <div class="rm-exp-company">Mantra Communication Sdn. Bhd.</div>
+            <div class="rm-exp-loc">Kayu Ara, Selangor</div>
+            <ul class="rm-exp-pts">
+              <li>I was part of the PETRONAS creative team, responsible for assisting in the monthly social media content creation for Petronas Lubricants International (PLI) and other creative requirements such as print ads, brochures, product launches, presentation deck, yearly TSA awards events, and more.</li>
+              <li>Conceptualized original ideas that consistently captivated audiences and strengthened brand presence.</li>
+              <li>Led the visual direction and key visual for client campaigns, delivering trend-forward and high-impact designs under tight deadlines. Besides PETRONAS, I also managed the social media creative content creation and events design for brands like Panasonic Malaysia and Ovaltines.</li>
+              <li>I conducted site visits and proposed 3D floor plan designs for the events</li>
+              <li>I designed key visuals for events such as Petronita Orchid Run & Ride, Malaysia Sarong Music Run, CIMB Family Day, Panasonic CSR campaign, and more.</li>
+              <li>Ensured brand consistency across all materials by using appropriate colours, layouts, and templates</li>
+              <li>Collaborated with cross-functional creative teams, sharing insights and fostering a culture of learning</li>
+              <li>Inspired, inform, and captivate target audiences with visually compelling designs</li>
+            </ul>
+          </div>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Vice President Graphic &amp; Media</div>
+              <div class="rm-exp-date">2020 – 2024</div>
+            </div>
+            <div class="rm-exp-company">SIRIUS TV</div>
+            <div class="rm-exp-loc">Cyberjaya, Selangor</div>
+            <ul class="rm-exp-pts">
+              <li>Led end-to-end creative output across web, print, social media, broadcast, and digital marketing — ensuring brand alignment, quality, and timely delivery. </li>
+              <li>Managed a multidisciplinary team of designers, video editors, motion graphics artists, audio specialists, social media planners, and project managers.</li>
+              <li>Mentored and inspired team members to foster a positive, productive, and high-performing creative environment.</li>
+              <li>Acted as key liaison between internal creative teams, external agencies, marketing departments, clients, and executive stakeholders.</li>
+              <li>Transformed complex ideas into compelling visuals — developing print and digital designs that resonated with sophisticated audiences.</li>
+            </ul>
+          </div>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Senior Web &amp; Content Developer, Corporate Affairs</div>
+              <div class="rm-exp-date">2019 – 2020</div>
+            </div>
+            <div class="rm-exp-company">ECERDC</div>
+            <div class="rm-exp-loc">Putrajaya, Malaysia</div>
+            <ul class="rm-exp-pts">
+              <li>Administered ECERDC corporate website, microsite, intranet (staff portal), and official social media accounts — Facebook, Instagram, YouTube, and LinkedIn</li>
+              <li>Maintained content accuracy and functionality in alignment with corporate branding standards</li>
+              <li>Coordinated and delivered timely corporate communications: news, tender notices, festive campaigns, banners, backdrops, and promotional materials</li>
+              <li>Monitored and compiled internet traffic reports for website and social media on a monthly basis</li>
+              <li>Worked closely with various clusters and divisions to ensure accuracy of delivered information</li>
+              <li>Assisted in development and maintenance of related websites and microsites</li>
+              <li>Supported IT Division and other divisions during corporate programmes, investment promotion events, and community-oriented programmes</li>
+            </ul>
+          </div>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Digital Art Director</div>
+              <div class="rm-exp-date">2008 – 2019</div>
+            </div>
+            <div class="rm-exp-company">Astro Radio Sdn. Bhd.</div>
+            <div class="rm-exp-loc">Bukit Jalil, Kuala Lumpur</div>
+            <ul class="rm-exp-pts">
+              <li>Supervised the commercial design team daily using JIRA project management — zero missed deadlines</li>
+              <li>Oversaw all aspects of design and development; offered creative solutions when required</li>
+              <li>Led creative for Malaysia's top radio stations: hitz.fm, era.fm, sinar.fm, my.fm, lite.fm and more</li>
+              <li>Delivered campaigns for major clients: Shell, Digi, Disney, Petronas, Deeja, Etika, Maybank, Sunway, Tune Talk, and many more</li>
+              <li>Developed online promotional campaigns including leaderboard, MREC, masthead, site takeover, and other GDN formats</li>
+              <li>Pioneered responsive design, HTML5 rich-media ads, site takeovers, podcasts, and social media integration</li>
+              <li>Coordinated the interview and hiring process for new designers; groomed and mentored junior desginers</li>
+              <li>Conducted and presented SOPs, workflows, and brand guidelines to the design team</li>
+              <li>Coordinated with UX/UI, ad operations, content editors, and designers for new projects</li>
+              <li>Communicated with both internal Astro Radio teams and third-party clients to assess needs and digital requirements</li>
+            </ul>
+          </div>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Art Director</div>
+              <div class="rm-exp-date">2005 – 2008</div>
+            </div>
+            <div class="rm-exp-company">Digital Five Sdn. Bhd.</div>
+            <div class="rm-exp-loc">TPM, Kuala Lumpur</div>
+            <ul class="rm-exp-pts">
+              <li>Supervised a team of 10 designers in the radio design department toward stakeholder satisfaction</li>
+              <li>Ensured project deadlines were met through effective time management across multiple projects</li>
+              <li>Supervised designers in creating layouts and UI/UX for radio websites and ad campaigns</li>
+              <li>Produced engaging online advertising: MREC, Leaderboard, Site Takeover, Catfish, half banner, and promo pages</li>
+              <li>Maintained a competitive edge with new digital outlets — podcasts, responsive websites, HTML5/CSS3, and social media marketing</li>
+              <li>Designed, revamped, and maintained websites: hitz.fm, era.fm, thr.fm, astro.com.my, astroplc.com, murai.com.my, my.fm, sinar.fm, litefm.my, and more</li>
+              <li>Developed company website using ASP, DHTML, JavaScript, and Flash for web and banner animation</li>
+              <li>Liaised with project managers, developers, content editors, and client representatives</li>
+            </ul>
+          </div>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Web Designer / Multimedia Specialist</div>
+              <div class="rm-exp-date">2001 – 2005</div>
+            </div>
+            <div class="rm-exp-company">Airtime Management &amp; Programming Sdn. Bhd. (AMP) · Astro subsidiary</div>
+            <div class="rm-exp-loc">Kuala Lumpur, Malaysia</div>
+            <ul class="rm-exp-pts">
+              <li>Designed, revamped, and maintained websites for Era.fm, hitz.fm, Mix.fm, Gegar, My.fm, and others</li>
+              <li>Updated designs and content daily for the latest radio events, news, and contests</li>
+              <li>Designed corporate identities and print materials for on-ground and marketing teams</li>
+              <li>Created online promotional campaigns and microsites using HTML, CSS, and front-end coding</li>
+              <li>Designed client sponsorship pages — Leaderboard, MREC, Site Takeover, and other GDN formats</li>
+              <li>Built Flash games and seasonal e-greeting cards using Macromedia Flash with ActionScript 3.0</li>
+              <li>Conducted photography sessions with invited artists for studio and outdoor shoots</li>
+            </ul>
+          </div>
+
+          <div class="rm-exp">
+            <div class="rm-exp-head">
+              <div class="rm-exp-title">Multimedia Designer</div>
+              <div class="rm-exp-date">1999 – 2001</div>
+            </div>
+            <div class="rm-exp-company">United Multimedia Sdn. Bhd. (UMM) · UNITAR/KUB subsidiary</div>
+            <div class="rm-exp-loc">Kuala Lumpur, Malaysia</div>
+            <ul class="rm-exp-pts">
+              <li>Designed and managed the overall look and feel of e-learning courseware</li>
+              <li>Created UI/UX for courseware in CD format and online portal using Adobe Photoshop and Illustrator</li>
+              <li>Designed visual elements using Photoshop, Macromedia Flash, Illustrator, Lightwave, and 3D Studio Max</li>
+              <li>Created storyboards and site maps for all projects; collaborated with art director to visualise ideas</li>
+              <li>Created 2D and 3D animations using Macromedia Flash, 3D Studio Max, and Lightwave 3D</li>
+              <li>Presented the "Understanding the Brain and Human Intelligence" project to YAB Dato' Seri Dr. Mahathir Mohamad, Prime Minister of Malaysia, during his company visit in 2000</li>
+            </ul>
+          </div>
+
+        </div><!-- /right col -->
+      </div><!-- /rm-cols -->
+    </div><!-- /rm-body -->
+
+    <!-- Sticky action bar -->
+    <div class="rm-actions">
+      <span style="font-size:.72rem;color:var(--g400);letter-spacing:.06em">Rosmizan Abu Seman · Digital Art Director</span>
+      <div style="display:flex;gap:.75rem">
+        <button class="rm-dl-btn" onclick="downloadResume()">Download PDF</button>
+      </div>
+    </div>
+
+  </div><!-- /rm-modal -->
+</div><!-- /rm-overlay -->
+
+<script>
+/* ── CONFIG ─────────────────────────────── */
+const SUPA_URL  = 'https://zvmjbgdldlltnsewdzkf.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2bWpiZ2RsZGxsdG5zZXdkemtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NDAwMjUsImV4cCI6MjA5MjIxNjAyNX0.BlT_FBhXcM7brRpuMA9RoJQQSU_q8qWSw0TFK3jbHBY';
+const db = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+
+// Keep Supabase free-tier project alive — pings once on load
+setInterval(()=>{ db.from('hero_slides').select('id').limit(1); }, 1000 * 60 * 60 * 24); // every 24h
+
+/* ── STATE ──────────────────────────────── */
+let ALL_PROJECTS  = [];
+let DISPLAYED     = 0;
+const PAGE_SIZE   = 9;
+let ACTIVE_FILTER = 'all';
+let SLIDES=[], SLIDE_IDX=0, SLIDE_TIMER=null;
+
+/* ── BOOT ───────────────────────────────── */
+(async()=>{ await Promise.all([loadSlides(), loadProjects()]); startRotator(); })();
+
+/* ── NAV ────────────────────────────────── */
+window.addEventListener('scroll',()=>
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>60));
+function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
+function closeNav(){ document.getElementById('navLinks').classList.remove('open'); }
+
+/* ── HERO ───────────────────────────────── */
+async function loadSlides(){
+  const {data,error}=await db.from('hero_slides').select('*').eq('visible',true).order('sort_order');
+  SLIDES=(error||!data||!data.length)?[{
+    title:'Two Decades of Creative Work',subtitle:'Art Direction · Design · Photography',
+    description:'Senior Art Director with 20+ years across branding, digital, motion and photography.',
+    cta_label:'View Work',cta_href:'#work',cta_target:'_self'
+  }]:data;
+  renderHero();
+}
+function renderHero(){
+  const wrap=document.getElementById('heroSlides'),dots=document.getElementById('heroDots');
+  wrap.innerHTML=''; dots.innerHTML='';
+  SLIDES.forEach((s,i)=>{
+    const slide=document.createElement('div');
+    slide.className='hero-slide'+(i===0?' active':'');
+    const bg=document.createElement('div'); bg.className='hero-slide-bg';
+    if(s.video_url){
+      const v=document.createElement('video');
+      v.src=s.video_url; v.autoplay=v.muted=v.loop=v.playsInline=true;
+      v.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover';
+      slide.appendChild(v);
+    } else if(s.image_url){ bg.style.backgroundImage=`url(${s.image_url})`; }
+    else { bg.style.background='#1a1a1a'; }
+    slide.appendChild(bg);
+    const tgt=s.cta_target==='_blank'?'target="_blank" rel="noopener"':'';
+    slide.innerHTML+=`<div class="hero-content">
+      <div class="hero-eyebrow">${s.subtitle||'Portfolio'}</div>
+      <h1 class="hero-title">${(s.title||'').replace(/\\n/g,'<br>')}</h1>
+      <p class="hero-desc">${s.description||''}</p>
+      ${s.cta_label?`<a class="hero-cta" href="${s.cta_href||'#work'}" ${tgt}>${s.cta_label}</a>`:''}
+    </div>`;
+    wrap.appendChild(slide);
+    const dot=document.createElement('button');
+    dot.className='hdot'+(i===0?' on':''); dot.onclick=()=>gotoSlide(i);
+    dots.appendChild(dot);
+  });
+  updateHeroUI();
+  if(SLIDES.length>1){ clearInterval(SLIDE_TIMER); SLIDE_TIMER=setInterval(()=>gotoSlide((SLIDE_IDX+1)%SLIDES.length),5500); }
+}
+function gotoSlide(n){
+  document.querySelectorAll('.hero-slide')[SLIDE_IDX].classList.remove('active');
+  document.querySelectorAll('.hdot')[SLIDE_IDX].classList.remove('on');
+  SLIDE_IDX=n;
+  document.querySelectorAll('.hero-slide')[SLIDE_IDX].classList.add('active');
+  document.querySelectorAll('.hdot')[SLIDE_IDX].classList.add('on');
+  updateHeroUI();
+}
+function updateHeroUI(){
+  document.getElementById('heroCount').textContent=
+    `${String(SLIDE_IDX+1).padStart(2,'0')} / ${String(SLIDES.length).padStart(2,'0')}`;
+}
+
+/* ── TAG HELPERS ────────────────────────── */
+function getTags(p){
+  if(!p.category) return [];
+  if(Array.isArray(p.category)) return p.category.filter(Boolean);
+  return String(p.category).split(',').map(s=>s.trim()).filter(Boolean);
+}
+function tagsHTML(tags,cls){
+  return tags.map(t=>`<span class="${cls}">${t}</span>`).join('');
+}
+
+/* ── PROJECTS ───────────────────────────── */
+async function loadProjects(){
+  const {data,error}=await db.from('projects').select('*').eq('visible',true).order('sort_order');
+  if(error){ console.error(error.message); ALL_PROJECTS=sample(); }
+  else { ALL_PROJECTS=(data&&data.length)?data:sample(); }
+  renderProjects(true);
+}
+function filter(cat,btn){
+  ACTIVE_FILTER=cat; DISPLAYED=0;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderProjects(true);
+}
+function getFiltered(){
+  if(ACTIVE_FILTER==='all') return ALL_PROJECTS;
+  return ALL_PROJECTS.filter(p=>getTags(p).some(t=>t.toLowerCase()===ACTIVE_FILTER.toLowerCase()));
+}
+function renderProjects(reset){
+  if(reset) DISPLAYED=0;
+  const list=getFiltered();
+  const feat=list[0], rest=list.slice(1);
+  const featEl=document.getElementById('featArea'), gridEl=document.getElementById('gridArea');
+  if(reset){
+    if(feat){
+      const tags=getTags(feat);
+      featEl.innerHTML=`<div class="feat" onclick="openLb(${feat.id})">
+        <div class="feat-media">
+          ${feat.video_url
+            ?`<video autoplay muted loop playsinline><source src="${feat.video_url}"/></video>`
+            :`<img src="${feat.cover_image||''}" alt="${feat.title}" loading="eager"/>`}
+        </div>
+        <div class="feat-info">
+          <div class="proj-tags">${tagsHTML(tags,'proj-tag')}</div>
+          <h3 class="proj-title">${feat.title}</h3>
+          <p class="proj-desc">${feat.description||''}</p>
+          <span class="proj-link">View Project</span>
+        </div>
+      </div>`;
+    } else { featEl.innerHTML=''; }
+    gridEl.innerHTML='';
+  }
+  if(!list.length&&reset){
+    gridEl.innerHTML='<div class="empty"><p>No projects in this category yet.</p></div>';
+    document.getElementById('lmWrap').style.display='none'; return;
+  }
+  const slice=rest.slice(DISPLAYED, DISPLAYED+PAGE_SIZE);
+  slice.forEach(p=>{
+    const tags=getTags(p);
+    const src=p.cover_image||'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80';
+    const el=document.createElement('div');
+    el.className='gitem';
+    el.innerHTML=p.cover_video
+      ?`<video autoplay muted loop playsinline><source src="${p.cover_video}"/></video>`
+      :`<img src="${src}" alt="${p.title}" loading="lazy"/>`;
+    el.innerHTML+=`<div class="goverlay"><div class="ginfo">
+      <div class="gtags">${tagsHTML(tags,'gtag')}</div>
+      <div class="gtitle">${p.title}</div>
+    </div></div>`;
+    el.onclick=()=>openLb(p.id);
+    gridEl.appendChild(el);
+  });
+  DISPLAYED+=slice.length;
+  gridEl.querySelectorAll('img[loading="lazy"]').forEach(img=>{
+    if(img._obs) return; img._obs=true; lazyIO.observe(img);
+  });
+  document.getElementById('lmWrap').style.display=(DISPLAYED<rest.length)?'block':'none';
+}
+function loadMore(){ renderProjects(false); }
+const lazyIO=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.src=e.target.src; lazyIO.unobserve(e.target); } });
+},{rootMargin:'300px'});
+
+/* ── PROJECT VIEWER ──────────────────────── */
+let LB_PROJECT_INDEX=-1;
+let LB_MEDIA_INDEX=0;
+let LB_MEDIA_ITEMS=[];
+function getViewerProjects(){ return getFiltered(); }
+function buildMediaItems(p){
+  const items=[];
+  if(p.video_url) items.push({type:'video',url:p.video_url});
+  const imgs=p.images&&p.images.length?p.images:(p.cover_image?[p.cover_image]:[]);
+  imgs.forEach(url=>{ if(url) items.push({type:'image',url}); });
+  return items;
+}
+function openLb(id){
+  const list=getViewerProjects();
+  const idx=list.findIndex(x=>String(x.id)===String(id));
+  if(idx<0) return;
+  LB_PROJECT_INDEX=idx;
+  renderLbProject();
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function renderLbProject(){
+  const list=getViewerProjects();
+  const p=list[LB_PROJECT_INDEX]; if(!p) return;
+  LB_MEDIA_ITEMS=buildMediaItems(p); LB_MEDIA_INDEX=0;
+  document.getElementById('lbProjectCount').textContent=`Project ${LB_PROJECT_INDEX+1} of ${list.length}`;
+  document.getElementById('lbTags').innerHTML=tagsHTML(getTags(p),'lb-tag');
+  document.getElementById('lbTitle').textContent=p.title||'';
+  document.getElementById('lbDesc').innerHTML=(p.description||'').replace(/\n/g,'<br/>');
+  renderLbMedia();
+  renderLbProjectNav();
+}
+function renderLbMedia(){
+  const media=document.getElementById('lbMedia');
+  const item=LB_MEDIA_ITEMS[LB_MEDIA_INDEX];
+  if(!item){ media.innerHTML='<div style="height:300px;background:#111"></div>'; }
+  else if(item.type==='video'){
+    media.innerHTML=`<video id="lbMainVideo" controls playsinline preload="metadata"><source src="${item.url}"/></video>`;
+  } else {
+    media.innerHTML=`<img id="lbMainImg" src="${item.url}" alt=""/>`;
+  }
+  document.getElementById('lbThumbs').innerHTML=LB_MEDIA_ITEMS.map((m,i)=>{
+    const active=i===LB_MEDIA_INDEX?' on':'';
+    if(m.type==='video') return `<div class="lb-thumb-wrap"><button class="lb-thumb${active}" onclick="switchLb(${i})" aria-label="View video"><video src="${m.url}" muted preload="metadata"></video><span class="lb-thumb-play">▶</span></button></div>`;
+    return `<button class="lb-thumb${active}" onclick="switchLb(${i})" aria-label="View image"><img src="${m.url}" alt=""/></button>`;
+  }).join('');
+  document.querySelectorAll('.lb-thumb').forEach(t=>{ t.style.padding='0';t.style.overflow='hidden';t.style.display='block'; });
+  const hasMultiple=LB_MEDIA_ITEMS.length>1;
+  document.getElementById('lbPrevMedia').style.display=hasMultiple?'flex':'none';
+  document.getElementById('lbNextMedia').style.display=hasMultiple?'flex':'none';
+}
+function switchLb(index){
+  if(index<0||index>=LB_MEDIA_ITEMS.length) return;
+  LB_MEDIA_INDEX=index; renderLbMedia();
+}
+function prevMedia(){ if(LB_MEDIA_ITEMS.length>1) switchLb((LB_MEDIA_INDEX-1+LB_MEDIA_ITEMS.length)%LB_MEDIA_ITEMS.length); }
+function nextMedia(){ if(LB_MEDIA_ITEMS.length>1) switchLb((LB_MEDIA_INDEX+1)%LB_MEDIA_ITEMS.length); }
+function renderLbProjectNav(){
+  const list=getViewerProjects(), total=list.length;
+  const prev=document.getElementById('lbPrevProject'), next=document.getElementById('lbNextProject');
+  prev.disabled=LB_PROJECT_INDEX<=0; next.disabled=LB_PROJECT_INDEX>=total-1;
+  document.getElementById('lbProjectPosition').textContent=`${String(LB_PROJECT_INDEX+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+}
+function prevProject(){ if(LB_PROJECT_INDEX>0){ LB_PROJECT_INDEX--; renderLbProject(); } }
+function nextProject(){ const list=getViewerProjects(); if(LB_PROJECT_INDEX<list.length-1){ LB_PROJECT_INDEX++; renderLbProject(); } }
+function closeLb(){
+  const v=document.getElementById('lbMainVideo'); if(v) v.pause();
+  document.getElementById('lb').classList.remove('open'); document.body.style.overflow='';
+}
+document.getElementById('lb').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeLb(); });
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('lb').classList.contains('open')){
+    if(e.key==='Escape') closeLb();
+    else if(e.key==='ArrowLeft') prevProject();
+    else if(e.key==='ArrowRight') nextProject();
+  }
+  if(e.key==='Escape') closeResume();
+});
+
+/* ── RESUME MODAL ───────────────────────── */
+function openResume(){
+  document.getElementById('rmOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeResume(){
+  document.getElementById('rmOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('rmOverlay')) closeResume();
+}
+function printResume(){ window.print(); }
+function downloadResume(){
+  const a=document.createElement('a');
+  a.href='https://zvmjbgdldlltnsewdzkf.supabase.co/storage/v1/object/public/portfolio-media/uploads/1785650672250-Rosmizan-Abu-Seman-Resume.pdf';
+  a.download='Rosmizan-Abu-Seman-Resume.pdf';
+  a.target='_blank';
+  a.click();
+}
+
+/* ── CONTACT ROTATOR ────────────────────── */
+function startRotator(){
+  let cur=0;
+  const total=5;
+  setInterval(()=>{
+    const prev=cur; cur=(cur+1)%total;
+    const pEl=document.getElementById('ct'+prev);
+    const nEl=document.getElementById('ct'+cur);
+    if(!pEl||!nEl) return;
+    pEl.classList.remove('in'); pEl.classList.add('out');
+    setTimeout(()=>{ pEl.classList.remove('out'); },600);
+    nEl.classList.remove('out'); nEl.classList.add('in');
+  },3400);
+}
+
+/* ── CONTACT FORM ───────────────────────── */
+function submitContact(e){
+  e.preventDefault();
+  const name=document.getElementById('cName').value;
+  const email=document.getElementById('cEmail').value;
+  const msg=document.getElementById('cMsg').value;
+  const ml=`mailto:helloijan888@gmail.com?subject=${encodeURIComponent('Project Enquiry from '+name)}&body=${encodeURIComponent('From: '+name+'\nEmail: '+email+'\n\n'+msg)}`;
+  window.location.href=ml;
+  const btn=document.getElementById('fsubmitBtn');
+  btn.textContent='Opening mail app…'; btn.disabled=true;
+  setTimeout(()=>{ btn.textContent='Send Message'; btn.disabled=false; },3500);
+}
+
+/* ── SAMPLE DATA ────────────────────────── */
+function sample(){
+  return [
+    {id:1,title:'Brand Campaign 2024',category:['Key Visual','Print'],description:'Full campaign visual direction for a regional brand.',cover_image:'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&q=80',images:['https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&q=80'],sort_order:1},
+    {id:2,title:'Social Media Series',category:['Social Media'],description:'Monthly social content system for a lifestyle brand.',cover_image:'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80',images:['https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80'],sort_order:2},
+    {id:3,title:'Product Photography',category:['Photography'],description:'Studio and lifestyle photography for an e-commerce client.',cover_image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',images:['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80'],sort_order:3},
+    {id:4,title:'Corporate Event Design',category:['Events','Print'],description:'Full event branding, stage design and print collateral.',cover_image:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80',images:['https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80'],sort_order:4},
+    {id:5,title:'Brand Identity System',category:['Key Visual'],description:'Logo, typography and brand guidelines for a startup.',cover_image:'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80',images:['https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80'],sort_order:5},
+    {id:6,title:'Website Redesign',category:['Website'],description:'UX and visual redesign for a corporate website.',cover_image:'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',images:['https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80'],sort_order:6}
+  ];
+}
+</script>
+<footer style="text-align:center; padding:24px; font-family:sans-serif; color:#666;">
+  <p>👀 Visitors: <span id="visitor-count">…</span></p>
+</footer>
+
+<script>
+  (async () => {
+    const el = document.getElementById('visitor-count');
+    const isNew = !localStorage.getItem('hasVisited');
+
+    try {
+      // If new visitor, hit the counter; otherwise just read it
+      const url = '/api/counter' + (isNew ? '?hit=1' : '');
+      const res = await fetch(url);
+      const data = await res.json();
+      el.textContent = data.count.toLocaleString();
+
+      if (isNew) localStorage.setItem('hasVisited', 'true');
+    } catch (err) {
+      el.textContent = '—';
+      console.error('Counter failed:', err);
+    }
+  })();
+</script>
+</body>
+</html>

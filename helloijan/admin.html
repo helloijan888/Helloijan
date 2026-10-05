@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — HelloIjan Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0d0d0d;--white:#fafaf7;--g50:#f6f5f2;--g100:#efeeeb;--g200:#e2e1dd;--g400:#aeada7;--g600:#6b6a65;--accent:#b8966a;--danger:#c0392b;--success:#1a7a52;--font:'DM Sans',system-ui,sans-serif}
+body{font-family:var(--font);background:var(--g50);color:var(--black);min-height:100vh}
+#LOGIN{position:fixed;inset:0;z-index:9999;background:var(--white);display:flex;align-items:center;justify-content:center}#LOGIN.hidden{display:none}.lbox{width:340px}.llogo{font-size:1.4rem;font-weight:300;letter-spacing:.04em;margin-bottom:.3rem}.lsub{font-size:.75rem;color:var(--g400);letter-spacing:.1em;margin-bottom:2.5rem}.linput{display:block;width:100%;padding:.875rem 1rem;border:1px solid var(--g200);background:var(--g50);font-family:var(--font);font-size:.9rem;outline:none;margin-bottom:.75rem;transition:border-color .2s}.linput:focus{border-color:var(--black);background:var(--white)}.lbtn{width:100%;padding:.9rem;background:var(--black);color:var(--white);border:none;font-family:var(--font);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:opacity .2s}.lbtn:hover{opacity:.8}.lbtn:disabled{opacity:.5;cursor:wait}.lerr{font-size:.8rem;color:var(--danger);margin-top:.75rem;min-height:1.2rem}
+#APP{display:none}#APP.visible{display:block}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:210px;background:var(--white);border-right:1px solid var(--g200);padding:1.75rem 1.1rem;display:flex;flex-direction:column;z-index:100}.sl{font-size:.85rem;font-weight:500;margin-bottom:.2rem}.ss{font-size:.68rem;color:var(--g400);letter-spacing:.1em;margin-bottom:2.5rem}.snav{display:flex;flex-direction:column;gap:.2rem;flex:1}.ni{display:flex;align-items:center;gap:.75rem;padding:.6rem .8rem;border-radius:5px;cursor:pointer;font-size:.83rem;color:var(--g600);border:none;background:none;width:100%;text-align:left;transition:all .18s}.ni:hover{background:var(--g100);color:var(--black)}.ni.on{background:var(--black);color:var(--white)}.ni-ic{font-size:.95rem;width:16px;text-align:center}.sout{font-size:.72rem;color:var(--g400);cursor:pointer;background:none;border:none;text-align:left;padding:.5rem 0;transition:color .2s;margin-top:.5rem}.sout:hover{color:var(--danger)}
+.main{margin-left:210px;padding:2.5rem}.page{display:none}.page.on{display:block}.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}.pt{font-size:1.2rem;font-weight:500}.ps{font-size:.75rem;color:var(--g400);margin-top:.2rem}
+.btn{font-family:var(--font);font-size:.75rem;letter-spacing:.06em;padding:.6rem 1.2rem;cursor:pointer;border:1px solid;transition:all .18s;display:inline-flex;align-items:center;gap:.4rem}.bp{background:var(--black);color:var(--white);border-color:var(--black)}.bp:hover{opacity:.8}.bg{background:transparent;color:var(--g600);border-color:var(--g200)}.bg:hover{border-color:var(--black);color:var(--black)}.bd{background:transparent;color:var(--danger);border-color:var(--danger)}.bd:hover{background:var(--danger);color:#fff}.bs{padding:.38rem .85rem;font-size:.7rem}
+.card{background:var(--white);border:1px solid var(--g200);padding:1.5rem;margin-bottom:1.25rem}.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}.sc{background:var(--white);border:1px solid var(--g200);padding:1.2rem}.sv{font-size:2rem;font-weight:300;line-height:1}.sl2{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--g400);margin-top:.35rem}
+.tw{overflow-x:auto}.proj-row{cursor:grab}.proj-row.dragging{opacity:.45}.proj-row.drag-over td{border-top:2px solid var(--black);background:var(--g50)}.drag-handle{color:var(--g400);font-size:1.1rem;cursor:grab;user-select:none}.order-dirty{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;color:var(--accent);margin-right:.7rem}.collection-badge{display:inline-block;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;padding:.16rem .42rem;background:var(--g100);color:var(--g600);margin-top:.25rem}.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.83rem}th{text-align:left;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--g400);padding:0 1rem .75rem;font-weight:400}td{padding:.8rem 1rem;border-top:1px solid var(--g100);vertical-align:middle}tr:hover td{background:var(--g50)}.tthumb{width:54px;height:40px;object-fit:cover;display:block}.tph{width:54px;height:40px;background:var(--g100);display:block}.badge{display:inline-block;font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;padding:.18rem .55rem;border-radius:2px}.bv{background:#e6f4ec;color:#1a6640}.bh{background:var(--g100);color:var(--g600)}.tac{display:flex;gap:.4rem}.ttags{display:flex;flex-wrap:wrap;gap:.3rem}.ttag{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;background:var(--g100);color:var(--g600);padding:.15rem .45rem}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}.fi{display:flex;flex-direction:column;gap:.35rem}.fi.full{grid-column:1/-1}.fl{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--g600)}.finput{font-family:var(--font);font-size:.88rem;padding:.7rem .85rem;border:1px solid var(--g200);background:var(--g50);outline:none;transition:border-color .2s;width:100%}.finput:focus{border-color:var(--black);background:var(--white)}select.finput{cursor:pointer}textarea.finput{resize:vertical;min-height:85px}.fhint{font-size:.68rem;color:var(--g400)}
+.tag-grid{display:flex;flex-wrap:wrap;gap:.5rem;padding:.6rem 0}.tag-cb{display:none}.tag-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.38rem .85rem;border:1px solid var(--g200);color:var(--g600);cursor:pointer;transition:all .18s;user-select:none}.tag-label:hover{border-color:var(--black);color:var(--black)}.tag-cb:checked+.tag-label{background:var(--black);color:#fff;border-color:var(--black)}
+.uz{border:2px dashed var(--g200);padding:2.5rem;text-align:center;cursor:pointer;transition:border-color .2s}.uz:hover,.uz.drag{border-color:var(--black)}.uz-ic{font-size:1.75rem;margin-bottom:.6rem;color:var(--g400)}.uz-lb{font-size:.875rem;color:var(--g600);margin-bottom:.2rem}.uz-sub{font-size:.72rem;color:var(--g400)}.pbar{height:3px;background:var(--g200);border-radius:2px;overflow:hidden;margin-top:.75rem;display:none}.pfill{height:100%;background:var(--black);border-radius:2px;transition:width .3s;width:0%}
+.scard-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}.scard{border:1px solid var(--g200);background:var(--white);overflow:hidden}.scard-img{height:135px;width:100%;object-fit:cover;display:block;background:var(--g100)}.scard-ph{height:135px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g400)}.scard-body{padding:.9rem 1rem}.scard-title{font-size:.88rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.2rem}.scard-sub{font-size:.75rem;color:var(--g400)}.scard-ft{display:flex;gap:.4rem;align-items:center;padding:.7rem 1rem;border-top:1px solid var(--g100)}
+.mo{position:fixed;inset:0;background:rgba(13,13,13,.55);z-index:500;display:none;align-items:center;justify-content:center}.mo.open{display:flex}.mb{background:var(--white);width:620px;max-width:95vw;max-height:90vh;overflow-y:auto;padding:2rem}.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem}.mt{font-size:1rem;font-weight:500}.mc{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--g400);line-height:1}.mc:hover{color:var(--black)}.mf{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.5rem;border-top:1px solid var(--g100);padding-top:1.2rem}
+.preview{display:none;margin-top:.4rem;border:1px solid var(--g200);background:var(--g50);padding:.5rem}.preview.show{display:block}.preview img,.preview video{display:block;width:100%;max-height:190px;object-fit:contain;background:var(--g100)}.preview-note{font-size:.65rem;color:var(--g400);margin-top:.35rem}
+.gallery-editor{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:.65rem;margin-top:.6rem}.gitem{position:relative;border:1px solid var(--g200);background:var(--g50);cursor:grab;overflow:hidden}.gitem.dragging{opacity:.45}.gitem img,.gitem video{display:block;width:100%;height:82px;object-fit:cover}.gitem .gnum{position:absolute;left:5px;top:5px;background:rgba(13,13,13,.75);color:#fff;font-size:.62rem;padding:.15rem .35rem}.gitem .gdel{position:absolute;right:4px;top:4px;background:rgba(13,13,13,.78);color:#fff;border:0;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.7rem}.gitem .gname{padding:.35rem;font-size:.6rem;color:var(--g600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1rem;margin-top:1.5rem}.mcard{border:1px solid var(--g200);background:var(--white);overflow:hidden}.mcard img,.mcard video{width:100%;height:115px;object-fit:cover;display:block}.mcard-ft{padding:.55rem .7rem}.mcard-name{font-size:.7rem;color:var(--g600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:.45rem}
+#TOAST{position:fixed;bottom:2rem;right:2rem;z-index:9998;display:flex;flex-direction:column;gap:.5rem}.toast{padding:.8rem 1.2rem;font-size:.83rem;border-radius:3px;background:var(--black);color:#fff;animation:tin .3s ease}.toast.ok{background:var(--success)}.toast.err{background:var(--danger)}@keyframes tin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.empty2{text-align:center;padding:3.5rem;color:var(--g400);font-size:.875rem}
+@media(max-width:800px){.sidebar{width:175px}.main{margin-left:175px;padding:1.5rem}.sgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.sidebar{position:static;width:100%;height:auto;min-height:0}.snav{flex-direction:row;overflow:auto}.sout{position:absolute;right:1rem;top:1.5rem}.main{margin-left:0;padding:1rem}.fg{grid-template-columns:1fr}.fi.full{grid-column:auto}.mb{padding:1.25rem}}
+</style>
+</head>
+<body>
+<div id="TOAST"></div>
+
+<div id="LOGIN">
+  <div class="lbox">
+    <div class="llogo">HelloIjan Admin</div><div class="lsub">Portfolio CMS</div>
+    <input id="lemail" class="linput" type="email" autocomplete="username" placeholder="Admin email"/>
+    <input id="lpw" class="linput" type="password" autocomplete="current-password" placeholder="Password"/>
+    <button class="lbtn" onclick="login()">Sign in</button><div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<div id="APP">
+  <div class="sidebar">
+    <div class="sl">HelloIjan</div><div class="ss">Admin Panel</div>
+    <nav class="snav">
+      <button class="ni on" onclick="nav('dash',this)"><span class="ni-ic">◻</span>Dashboard</button>
+      <button class="ni" onclick="nav('hero',this)"><span class="ni-ic">◈</span>Hero Slides</button>
+      <button class="ni" onclick="nav('proj',this)"><span class="ni-ic">◫</span>Projects</button>
+      <button class="ni" onclick="nav('media',this)"><span class="ni-ic">◉</span>Media</button>
+    </nav>
+    <div id="adminEmail" style="font-size:.65rem;color:var(--g400);padding:.4rem 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div><button class="sout" onclick="logout()">Sign out</button>
+  </div>
+
+  <div class="main">
+    <div class="page on" id="pDash">
+      <div class="ph"><div><div class="pt">Dashboard</div><div class="ps">Overview</div></div><a href="/" target="_blank" class="btn bg bs">View Site ↗</a></div>
+      <div class="sgrid">
+        <div class="sc"><div class="sv" id="dProj">—</div><div class="sl2">Projects</div></div>
+        <div class="sc"><div class="sv" id="dSlides">—</div><div class="sl2">Hero Slides</div></div>
+        <div class="sc"><div class="sv" id="dMedia">—</div><div class="sl2">Media Files</div></div>
+        <div class="sc"><div class="sv" id="dCats">—</div><div class="sl2">Categories Used</div></div>
+      </div>
+      <div class="card"><div style="font-size:.8rem;font-weight:500;margin-bottom:1rem">Quick Actions</div>
+        <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+          <button class="btn bp" onclick="nav('proj',navBtn(2));openProjModal()">+ New Project</button>
+          <button class="btn bg" onclick="nav('hero',navBtn(1));openSlideModal()">+ New Slide</button>
+          <button class="btn bg" onclick="nav('media',navBtn(3))">Upload Media</button>
+        </div>
+      </div>
+      <div class="card" style="background:var(--g50)">
+        <div style="font-size:.8rem;font-weight:500;margin-bottom:.75rem">Recommended Image Sizes</div>
+        <div style="font-size:.8rem;color:var(--g600);line-height:2">
+          <b>Hero Slide</b> — 1920 × 1080px (16:9) · JPG/WEBP · max 500KB<br/>
+          <b>Portfolio Cover</b> — 1200 × 900px (4:3) · JPG/WEBP · max 300KB<br/>
+          <b>Gallery Images</b> — 1600 × 1200px max · JPG/WEBP · max 500KB<br/>
+          <b>Format</b> — Save as WEBP for best quality/size ratio
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="pHero">
+      <div class="ph"><div><div class="pt">Hero Slides</div><div class="ps">Full-screen highlights</div></div><button class="btn bp" onclick="openSlideModal()">+ Add Slide</button></div>
+      <div class="scard-grid" id="scards"></div>
+    </div>
+
+    <div class="page" id="pProj">
+      <div class="ph"><div><div class="pt">Projects</div><div class="ps">Drag projects to arrange your portfolio order</div></div><div style="display:flex;align-items:center;gap:.5rem"><span id="projectOrderStatus" class="order-dirty" style="display:none">● Unsaved order</span><button id="saveOrderBtn" class="btn bg" onclick="saveProjectOrder()" disabled>Save Order</button><button class="btn bp" onclick="openProjModal()">+ Add Project</button></div></div>
+      <div class="card" style="padding:0"><div class="tw"><table><thead><tr><th></th><th>Cover</th><th>Title</th><th>Tags</th><th>Status</th><th>Order</th><th>Actions</th></tr></thead><tbody id="ptbody"></tbody></table></div></div>
+    </div>
+
+    <div class="page" id="pMedia">
+      <div class="ph"><div><div class="pt">Media Library</div><div class="ps">Supabase Storage</div></div></div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.8rem"><label class="fl" style="margin:0">Upload to</label><select id="uploadCollection" class="finput" style="width:auto;min-width:180px"><option value="unsorted">Unsorted</option><option value="projects">Projects</option><option value="hero">Hero</option><option value="social">Social</option><option value="client-work">Client Work</option><option value="personal">Personal</option></select><span class="fhint">Existing files stay where they are. New uploads can be organised into collections.</span></div>
+        <div class="uz" id="udz" onclick="document.getElementById('ufi').click()">
+          <div class="uz-ic">⬆</div><div class="uz-lb">Drop files here or click to upload</div>
+          <div class="uz-sub">PNG · JPG · WEBP · MP4 · MOV — max 100MB per file</div>
+          <div class="pbar" id="pb"><div class="pfill" id="pf"></div></div>
+        </div>
+        <input type="file" id="ufi" style="display:none" multiple accept="image/*,video/*" onchange="uploadFiles(this.files)"/>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;flex-wrap:wrap">
+        <input id="mediaSearch" type="text" placeholder="🔍  Search by filename…" oninput="mediaSearchChanged()" style="border:1px solid var(--g200);padding:.65rem .875rem;font-size:.85rem;width:280px;background:var(--white);font-family:var(--font);outline:none"/>
+        <select id="mediaFilter" onchange="mediaFilterChanged()" style="border:1px solid var(--g200);padding:.65rem .875rem;font-size:.85rem;background:var(--white);font-family:var(--font);cursor:pointer;outline:none"><option value="all">All files</option><option value="image">Images only</option><option value="video">Videos only</option></select>
+        <select id="mediaCollection" onchange="mediaCollectionChanged()" style="border:1px solid var(--g200);padding:.65rem .875rem;font-size:.85rem;background:var(--white);font-family:var(--font);cursor:pointer;outline:none"><option value="all">All collections</option><option value="projects">Projects</option><option value="hero">Hero</option><option value="social">Social</option><option value="client-work">Client Work</option><option value="personal">Personal</option><option value="unsorted">Unsorted</option></select>
+        <span id="mediaCount" style="font-size:.78rem;color:var(--g400)"></span>
+      </div>
+      <div class="mgrid" id="mgrid"></div><div id="mediaPagination" style="display:flex;align-items:center;justify-content:center;gap:.5rem;padding:2rem 0 1rem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT MODAL -->
+<div class="mo" id="mProj">
+  <div class="mb">
+    <div class="mh"><div class="mt" id="mProjTitle">New Project</div><button class="mc" onclick="closeM('mProj')" aria-label="Close">✕</button></div>
+    <div class="fg">
+      <div class="fi full"><label class="fl">Title *</label><input class="finput" id="pT" placeholder="Project title"/></div>
+      <div class="fi full"><label class="fl">Categories / Tags <span style="text-transform:none;letter-spacing:0;color:var(--g400)">(select all that apply)</span></label>
+        <div class="tag-grid" id="tagGrid">
+          <input type="checkbox" class="tag-cb" id="tg-video" value="Video"/><label class="tag-label" for="tg-video">Video</label>
+          <input type="checkbox" class="tag-cb" id="tg-kv" value="Key Visual"/><label class="tag-label" for="tg-kv">Key Visual</label>
+          <input type="checkbox" class="tag-cb" id="tg-photo" value="Photography"/><label class="tag-label" for="tg-photo">Photography</label>
+          <input type="checkbox" class="tag-cb" id="tg-social" value="Social Media"/><label class="tag-label" for="tg-social">Social Media</label>
+          <input type="checkbox" class="tag-cb" id="tg-3d" value="3D"/><label class="tag-label" for="tg-3d">3D</label>
+          <input type="checkbox" class="tag-cb" id="tg-web" value="Website"/><label class="tag-label" for="tg-web">Website</label>
+          <input type="checkbox" class="tag-cb" id="tg-events" value="Events"/><label class="tag-label" for="tg-events">Events</label>
+          <input type="checkbox" class="tag-cb" id="tg-print" value="Print"/><label class="tag-label" for="tg-print">Print</label>
+        </div>
+      </div>
+      <div class="fi full"><label class="fl">Description</label><textarea class="finput" id="pD" placeholder="Short project description…"></textarea></div>
+      <div class="fi"><label class="fl">Cover Image URL</label><input class="finput" id="pCI" placeholder="https://…" oninput="updateImagePreview('pCI','pCoverPreview')"/><div class="preview" id="pCoverPreview"><img id="pCoverImg" alt="Cover preview"/></div></div>
+      <div class="fi"><label class="fl">Video URL (lightbox)</label><input class="finput" id="pV" placeholder="https://… (optional)"/></div>
+      <div class="fi"><label class="fl">Portfolio Order</label><div class="finput" style="color:var(--g400);background:var(--g100)">Set from the Projects page by dragging</div></div>
+      <div class="fi"><label class="fl">Visibility</label><select class="finput" id="pVis"><option value="true">Visible</option><option value="false">Hidden</option></select></div>
+      <div class="fi full">
+        <label class="fl">Gallery Images <span style="text-transform:none;letter-spacing:0;color:var(--g400)">(one URL per line)</span></label>
+        <textarea class="finput" id="pIM" placeholder="https://img1.jpg&#10;https://img2.jpg" style="min-height:75px" oninput="renderGalleryEditor()"></textarea>
+        <span class="fhint">Drag thumbnails to reorder. Click × to remove. You can still paste URLs directly above.</span>
+        <div class="gallery-editor" id="galleryEditor"></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn bg" onclick="closeM('mProj')">Cancel</button><button class="btn bp" onclick="saveProj()">Save Project</button></div>
+  </div>
+</div>
+
+<!-- SLIDE MODAL -->
+<div class="mo" id="mSlide">
+  <div class="mb">
+    <div class="mh"><div class="mt" id="mSlideTitle">New Hero Slide</div><button class="mc" onclick="closeM('mSlide')" aria-label="Close">✕</button></div>
+    <div class="fg">
+      <div class="fi full"><label class="fl">Headline *</label><input class="finput" id="sT" placeholder="Main headline text"/></div>
+      <div class="fi"><label class="fl">Subtitle / Label</label><input class="finput" id="sSub" placeholder="e.g. Art Direction · 2025"/></div>
+      <div class="fi"><label class="fl">Description</label><input class="finput" id="sD" placeholder="Supporting text under headline"/></div>
+      <div class="fi"><label class="fl">Background Image URL</label><input class="finput" id="sImg" placeholder="https://…" oninput="updateImagePreview('sImg','sPreview')"/><div class="preview" id="sPreview"><img id="sPreviewImg" alt="Slide preview"/></div></div>
+      <div class="fi"><label class="fl">Background Video URL</label><input class="finput" id="sVid" placeholder="https://… (optional)"/></div>
+      <div class="fi"><label class="fl">CTA Button Text</label><input class="finput" id="sCL" placeholder="View Work"/></div>
+      <div class="fi"><label class="fl">CTA Button Link</label><input class="finput" id="sCH" placeholder="#work or https://…"/></div>
+      <div class="fi"><label class="fl">Open Link In</label><select class="finput" id="sCT"><option value="_self">Same window</option><option value="_blank">New tab / window</option></select></div>
+      <div class="fi"><label class="fl">Sort Order</label><input class="finput" type="number" id="sO" value="0"/></div>
+      <div class="fi"><label class="fl">Visibility</label><select class="finput" id="sVis"><option value="true">Visible</option><option value="false">Hidden</option></select></div>
+    </div>
+    <div class="mf"><button class="btn bg" onclick="closeM('mSlide')">Cancel</button><button class="btn bp" onclick="saveSlide()">Save Slide</button></div>
+  </div>
+</div>
+
+<script>
+/* ── CONFIG ─────────────────────── */
+const SUPA_URL='https://zvmjbgdldlltnsewdzkf.supabase.co';
+// IMPORTANT: use the Supabase Publishable key here, never a service_role/secret key.
+const SUPA_PUBLISHABLE='sb_publishable_fSpBwgCHmiDJ87l8odfWNg_lxrKmJJD';
+const BUCKET='portfolio-media';
+const db=window.supabase.createClient(SUPA_URL,SUPA_PUBLISHABLE);
+
+/* ── STATE ─────────────────────── */
+let PROJECTS=[],SLIDES=[],MEDIA=[];
+let PROJECT_ORDER_DIRTY=false, projectDragId=null, projectDragOverId=null;
+let EDIT_PROJ=null,EDIT_SLIDE=null;
+let MODAL_SNAPSHOT={};
+const MEDIA_PER_PAGE=24;
+let MEDIA_PAGE=0,MEDIA_SEARCH='';
+
+/* ── AUTH ──────────────────────── */
+async function login(){
+  const email=document.getElementById('lemail').value.trim();
+  const password=document.getElementById('lpw').value;
+  const errEl=document.getElementById('lerr');
+  errEl.textContent='';
+  if(!email||!password){errEl.textContent='Enter your email and password.';return}
+  if(SUPA_PUBLISHABLE==='sb_publishable_fSpBwgCHmiDJ87l8odfWNg_lxrKmJJD'){errEl.textContent='Add your Supabase Publishable key first.';return}
+  const btn=document.querySelector('.lbtn');btn.disabled=true;btn.textContent='Signing in…';
+  const {error}=await db.auth.signInWithPassword({email,password});
+  btn.disabled=false;btn.textContent='Sign in';
+  if(error){errEl.textContent=error.message||'Sign in failed.';document.getElementById('lpw').select();return}
+  await showApp();
+}
+async function showApp(){
+  const {data:{session}}=await db.auth.getSession();
+  if(!session)return;
+  document.getElementById('LOGIN').classList.add('hidden');
+  document.getElementById('APP').classList.add('visible');
+  document.getElementById('adminEmail').textContent=session.user.email||'';
+  await loadAll();
+}
+async function logout(){
+  await db.auth.signOut();
+  document.getElementById('APP').classList.remove('visible');
+  document.getElementById('LOGIN').classList.remove('hidden');
+  document.getElementById('lpw').value='';
+  document.getElementById('lerr').textContent='';
+  document.getElementById('adminEmail').textContent='';
+}
+function initAuth(){
+  db.auth.onAuthStateChange((event,session)=>{
+    if(session){
+      document.getElementById('LOGIN').classList.add('hidden');
+      document.getElementById('APP').classList.add('visible');
+      document.getElementById('adminEmail').textContent=session.user.email||'';
+      if(event==='SIGNED_IN'||event==='INITIAL_SESSION') loadAll();
+    }else{
+      document.getElementById('APP').classList.remove('visible');
+      document.getElementById('LOGIN').classList.remove('hidden');
+    }
+  });
+  db.auth.getSession().then(({data:{session}})=>{if(session)showApp()});
+}
+document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+document.getElementById('lemail').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('lpw').focus()});
+initAuth();
+
+/* ── NAV ───────────────────────── */
+const PAGES={dash:'pDash',hero:'pHero',proj:'pProj',media:'pMedia'};
+function nav(k,btn){Object.values(PAGES).forEach(id=>document.getElementById(id).classList.remove('on'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));document.getElementById(PAGES[k]).classList.add('on');if(btn)btn.classList.add('on')}
+function navBtn(idx){return document.querySelectorAll('.ni')[idx]}
+
+/* ── LOAD ──────────────────────── */
+async function loadAll(){await Promise.all([loadProjects(),loadSlides(),loadMedia()]);updateDash()}
+
+/* ── TAGS ──────────────────────── */
+function getTags(p){if(!p.category)return[];if(Array.isArray(p.category))return p.category.filter(Boolean);return String(p.category).split(',').map(s=>s.trim()).filter(Boolean)}
+const ALL_TAGS=['Video','Key Visual','Photography','Social Media','3D','Website','Events','Print'];
+const TAG_IDS=['tg-video','tg-kv','tg-photo','tg-social','tg-3d','tg-web','tg-events','tg-print'];
+function clearTags(){TAG_IDS.forEach(id=>document.getElementById(id).checked=false)}
+function setTags(arr){clearTags();arr.forEach(t=>{const idx=ALL_TAGS.indexOf(t);if(idx>=0)document.getElementById(TAG_IDS[idx]).checked=true})}
+function getCheckedTags(){return TAG_IDS.map((id,i)=>document.getElementById(id).checked?ALL_TAGS[i]:null).filter(Boolean)}
+
+/* ── UNSAVED CHANGES ───────────── */
+function getModalState(modalId){
+  if(modalId==='mProj')return JSON.stringify({
+    pT:document.getElementById('pT').value,pD:document.getElementById('pD').value,pCI:document.getElementById('pCI').value,
+    pV:document.getElementById('pV').value,pVis:document.getElementById('pVis').value,
+    pIM:document.getElementById('pIM').value,tags:getCheckedTags()
+  });
+  if(modalId==='mSlide')return JSON.stringify({
+    sT:document.getElementById('sT').value,sSub:document.getElementById('sSub').value,sD:document.getElementById('sD').value,
+    sImg:document.getElementById('sImg').value,sVid:document.getElementById('sVid').value,sCL:document.getElementById('sCL').value,
+    sCH:document.getElementById('sCH').value,sCT:document.getElementById('sCT').value,sO:document.getElementById('sO').value,sVis:document.getElementById('sVis').value
+  });
+  return '';
+}
+function takeModalSnapshot(modalId){MODAL_SNAPSHOT[modalId]=getModalState(modalId)}
+function hasUnsavedChanges(modalId){return getModalState(modalId)!==MODAL_SNAPSHOT[modalId]}
+
+/* ── IMAGE PREVIEW ─────────────── */
+function updateImagePreview(inputId,previewId){
+  const url=document.getElementById(inputId).value.trim();
+  const box=document.getElementById(previewId);
+  const img=box.querySelector('img');
+  if(!url){box.classList.remove('show');img.removeAttribute('src');return}
+  img.src=url;box.classList.add('show');
+  img.onerror=()=>box.classList.remove('show');
+}
+
+/* ── PROJECTS ──────────────────── */
+async function loadProjects(){
+  const{data,error}=await db.from('projects').select('*').order('sort_order',{ascending:true}).order('id',{ascending:true});
+  if(error){toast('DB error: '+error.message,'err');PROJECTS=[]}else PROJECTS=data||[];
+  PROJECT_ORDER_DIRTY=false;projectDragId=null;projectDragOverId=null;renderProjTable();updateProjectOrderUI()
+}
+function renderProjTable(){
+  const tb=document.getElementById('ptbody');
+  if(!PROJECTS.length){tb.innerHTML='<tr><td colspan="7"><div class="empty2">No projects yet — click "+ Add Project".</div></td></tr>';return}
+  tb.innerHTML=PROJECTS.map((p,i)=>{const tags=getTags(p);return `<tr class="proj-row" draggable="true" data-id="${p.id}" ondragstart="projectDragStart(event,${p.id})" ondragover="projectDragOver(event,${p.id})" ondrop="projectDrop(event,${p.id})" ondragend="projectDragEnd()">
+    <td><span class="drag-handle" title="Drag to reorder">⠿</span></td>
+    <td>${p.cover_image?`<img class="tthumb" src="${escapeAttr(p.cover_image)}" alt=""/>`:'<div class="tph"></div>'}</td>
+    <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(p.title)}</td>
+    <td><div class="ttags">${tags.map(t=>`<span class="ttag">${escapeHtml(t)}</span>`).join('')||'—'}</div></td>
+    <td><span class="badge ${p.visible?'bv':'bh'}">${p.visible?'Visible':'Hidden'}</span></td>
+    <td style="color:var(--g400)">${i+1}</td>
+    <td><div class="tac"><button class="btn bg bs" onclick="event.stopPropagation();editProj(${p.id})">Edit</button><button class="btn bg bs" onclick="event.stopPropagation();duplicateProj(${p.id})">Duplicate</button><button class="btn bd bs" onclick="event.stopPropagation();delProj(${p.id})">Del</button></div></td>
+  </tr>`}).join('')
+}
+function updateProjectOrderUI(){
+  const btn=document.getElementById('saveOrderBtn'),status=document.getElementById('projectOrderStatus');
+  if(btn){btn.disabled=!PROJECT_ORDER_DIRTY;btn.textContent=PROJECT_ORDER_DIRTY?'Save Order':'Order Saved'}
+  if(status)status.style.display=PROJECT_ORDER_DIRTY?'inline-flex':'none';
+}
+function projectDragStart(e,id){projectDragId=id;e.dataTransfer.effectAllowed='move';e.currentTarget.classList.add('dragging')}
+function projectDragOver(e,id){e.preventDefault();if(projectDragId===null||projectDragId===id)return;e.dataTransfer.dropEffect='move';projectDragOverId=id;document.querySelectorAll('.proj-row').forEach(r=>r.classList.remove('drag-over'));e.currentTarget.classList.add('drag-over')}
+function projectDrop(e,targetId){e.preventDefault();if(projectDragId===null||projectDragId===targetId)return;const from=PROJECTS.findIndex(p=>p.id===projectDragId),to=PROJECTS.findIndex(p=>p.id===targetId);if(from<0||to<0)return;const[moved]=PROJECTS.splice(from,1);PROJECTS.splice(to,0,moved);PROJECTS.forEach((p,i)=>p.sort_order=i+1);PROJECT_ORDER_DIRTY=true;projectDragId=null;projectDragOverId=null;renderProjTable();updateProjectOrderUI()}
+function projectDragEnd(){projectDragId=null;projectDragOverId=null;document.querySelectorAll('.proj-row').forEach(r=>r.classList.remove('dragging','drag-over'))}
+async function saveProjectOrder(){
+  if(!PROJECTS.length)return;
+  const btn=document.getElementById('saveOrderBtn');if(btn)btn.disabled=true;
+  const results=await Promise.all(PROJECTS.map((p,i)=>db.from('projects').update({sort_order:i+1}).eq('id',p.id)));
+  const bad=results.find(r=>r.error);
+  if(bad){toast('Order save error: '+bad.error.message,'err');updateProjectOrderUI();return}
+  PROJECTS.forEach((p,i)=>p.sort_order=i+1);PROJECT_ORDER_DIRTY=false;renderProjTable();updateProjectOrderUI();toast('Project order saved','ok')
+}
+function openProjModal(id){
+  EDIT_PROJ=id||null;const p=id?PROJECTS.find(x=>x.id===id):null;
+  document.getElementById('mProjTitle').textContent=id?'Edit Project':'New Project';
+  document.getElementById('pT').value=p?.title||'';document.getElementById('pD').value=p?.description||'';
+  document.getElementById('pCI').value=p?.cover_image||'';document.getElementById('pV').value=p?.video_url||'';
+  document.getElementById('pVis').value=p?String(p.visible):'true';
+  document.getElementById('pIM').value=(p?.images||[]).join('\n');setTags(getTags(p||{}));
+  document.getElementById('mProj').classList.add('open');updateImagePreview('pCI','pCoverPreview');renderGalleryEditor();takeModalSnapshot('mProj')
+}
+function editProj(id){openProjModal(id)}
+async function saveProj(){
+  const title=document.getElementById('pT').value.trim();if(!title){toast('Title is required','err');return}
+  const tags=getCheckedTags(),raw=document.getElementById('pIM').value.trim();
+  const images=raw?raw.split('\n').map(s=>s.trim()).filter(Boolean):[];
+  const existingOrder=EDIT_PROJ?((PROJECTS.find(p=>p.id===EDIT_PROJ)||{}).sort_order||0):0;
+  const nextOrder=EDIT_PROJ?existingOrder:(PROJECTS.length?Math.max(...PROJECTS.map(p=>Number(p.sort_order)||0))+1:1);
+  const payload={title,category:tags,description:document.getElementById('pD').value.trim()||null,cover_image:document.getElementById('pCI').value.trim()||null,video_url:document.getElementById('pV').value.trim()||null,sort_order:nextOrder,visible:document.getElementById('pVis').value==='true',images};
+  let err;if(EDIT_PROJ){({error:err}=await db.from('projects').update(payload).eq('id',EDIT_PROJ))}else{({error:err}=await db.from('projects').insert({...payload,created_at:new Date().toISOString()}))}
+  if(err){toast('Save error: '+err.message,'err');return}
+  toast(EDIT_PROJ?'Project updated':'Project created','ok');closeM('mProj',true);await loadProjects();updateDash()
+}
+async function duplicateProj(id){
+  const p=PROJECTS.find(x=>x.id===id);if(!p)return;
+  const nextOrder=PROJECTS.length?Math.max(...PROJECTS.map(x=>Number(x.sort_order)||0))+1:1;
+  const payload={title:(p.title||'Untitled')+' — Copy',category:getTags(p),description:p.description||null,cover_image:p.cover_image||null,video_url:p.video_url||null,sort_order:nextOrder,visible:false,images:Array.isArray(p.images)?p.images:[]};
+  const{error}=await db.from('projects').insert({...payload,created_at:new Date().toISOString()});
+  if(error){toast('Duplicate error: '+error.message,'err');return}
+  toast('Project duplicated as hidden draft','ok');await loadProjects();updateDash()
+}
+async function delProj(id){if(!confirm('Delete this project? Cannot be undone.'))return;const{error}=await db.from('projects').delete().eq('id',id);if(error){toast('Delete error: '+error.message,'err');return}toast('Project deleted');await loadProjects();updateDash()}
+
+/* ── GALLERY EDITOR ────────────── */
+let galleryDragIndex=null;
+function renderGalleryEditor(){
+  const raw=document.getElementById('pIM').value.trim();
+  const urls=raw?raw.split('\n').map(s=>s.trim()).filter(Boolean):[];
+  const box=document.getElementById('galleryEditor');
+  if(!urls.length){box.innerHTML='';return}
+  box.innerHTML=urls.map((url,i)=>{
+    const isVid=/\.(mp4|mov|webm)(\?|$)/i.test(url);
+    return `<div class="gitem" draggable="true" data-index="${i}" ondragstart="galleryDragStart(event,${i})" ondragover="galleryDragOver(event)" ondrop="galleryDrop(event,${i})" ondragend="galleryDragEnd()">
+      ${isVid?`<video src="${escapeAttr(url)}" muted></video>`:`<img src="${escapeAttr(url)}" alt="" onerror="this.style.opacity='.25'"/>`}
+      <span class="gnum">${i+1}</span><button class="gdel" onclick="removeGalleryImage(${i})" title="Remove">×</button>
+      <div class="gname" title="${escapeAttr(url)}">${escapeHtml(url.split('/').pop()||url)}</div>
+    </div>`
+  }).join('')
+}
+function galleryDragStart(e,i){galleryDragIndex=i;e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move'}
+function galleryDragOver(e){e.preventDefault();e.dataTransfer.dropEffect='move'}
+function galleryDrop(e,targetIndex){e.preventDefault();if(galleryDragIndex===null||galleryDragIndex===targetIndex)return;const raw=document.getElementById('pIM').value.trim();let urls=raw?raw.split('\n').map(s=>s.trim()).filter(Boolean):[];const moved=urls.splice(galleryDragIndex,1)[0];urls.splice(targetIndex,0,moved);document.getElementById('pIM').value=urls.join('\n');galleryDragIndex=null;renderGalleryEditor()}
+function galleryDragEnd(){galleryDragIndex=null;document.querySelectorAll('.gitem').forEach(x=>x.classList.remove('dragging'))}
+function removeGalleryImage(i){let urls=document.getElementById('pIM').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);urls.splice(i,1);document.getElementById('pIM').value=urls.join('\n');renderGalleryEditor()}
+
+/* ── HERO SLIDES ──────────────── */
+async function loadSlides(){const{data,error}=await db.from('hero_slides').select('*').order('sort_order');if(error){toast('DB error: '+error.message,'err');SLIDES=[]}else SLIDES=data||[];renderSlides()}
+function renderSlides(){const c=document.getElementById('scards');if(!SLIDES.length){c.innerHTML='<div class="empty2">No slides yet.</div>';return}c.innerHTML=SLIDES.map(s=>`<div class="scard">${s.image_url?`<img class="scard-img" src="${escapeAttr(s.image_url)}" alt=""/>`:'<div class="scard-ph">No image</div>'}<div class="scard-body"><div class="scard-title">${escapeHtml(s.title||'Untitled')}</div><div class="scard-sub">${escapeHtml(s.subtitle||'')} ${s.cta_target==='_blank'?'· opens new tab':''}</div></div><div class="scard-ft"><span class="badge ${s.visible?'bv':'bh'}" style="margin-right:auto">${s.visible?'Visible':'Hidden'}</span><button class="btn bg bs" onclick="editSlide(${s.id})">Edit</button><button class="btn bd bs" onclick="delSlide(${s.id})">Del</button></div></div>`).join('')}
+function openSlideModal(id){
+  EDIT_SLIDE=id||null;const s=id?SLIDES.find(x=>x.id===id):null;
+  document.getElementById('mSlideTitle').textContent=id?'Edit Slide':'New Hero Slide';
+  document.getElementById('sT').value=s?.title||'';document.getElementById('sSub').value=s?.subtitle||'';document.getElementById('sD').value=s?.description||'';
+  document.getElementById('sImg').value=s?.image_url||'';document.getElementById('sVid').value=s?.video_url||'';document.getElementById('sCL').value=s?.cta_label||'View Work';
+  document.getElementById('sCH').value=s?.cta_href||'#work';document.getElementById('sCT').value=s?.cta_target||'_self';document.getElementById('sO').value=s?.sort_order||0;document.getElementById('sVis').value=s?String(s.visible):'true';
+  document.getElementById('mSlide').classList.add('open');updateImagePreview('sImg','sPreview');takeModalSnapshot('mSlide')
+}
+function editSlide(id){openSlideModal(id)}
+async function saveSlide(){
+  const title=document.getElementById('sT').value.trim();if(!title){toast('Headline is required','err');return}
+  const payload={title,subtitle:document.getElementById('sSub').value.trim()||null,description:document.getElementById('sD').value.trim()||null,image_url:document.getElementById('sImg').value.trim()||null,video_url:document.getElementById('sVid').value.trim()||null,cta_label:document.getElementById('sCL').value.trim()||'View Work',cta_href:document.getElementById('sCH').value.trim()||'#work',cta_target:document.getElementById('sCT').value||'_self',sort_order:parseInt(document.getElementById('sO').value)||0,visible:document.getElementById('sVis').value==='true'};
+  let err;if(EDIT_SLIDE){({error:err}=await db.from('hero_slides').update(payload).eq('id',EDIT_SLIDE))}else{({error:err}=await db.from('hero_slides').insert({...payload,created_at:new Date().toISOString()}))}
+  if(err){toast('Save error: '+err.message,'err');return}toast(EDIT_SLIDE?'Slide updated':'Slide created','ok');closeM('mSlide',true);await loadSlides();updateDash()
+}
+async function delSlide(id){if(!confirm('Delete this slide?'))return;const{error}=await db.from('hero_slides').delete().eq('id',id);if(error){toast('Delete error: '+error.message,'err');return}toast('Slide deleted');await loadSlides();updateDash()}
+
+/* ── MEDIA ─────────────────────── */
+const VIDEO_EXT=/\.(mp4|mov|webm|m4v|avi|mkv|mpeg|mpg|3gp|ogv)$/i;
+const COLLECTIONS={projects:'Projects',hero:'Hero',social:'Social','client-work':'Client Work',personal:'Personal'};
+function isVideoFile(f){return !!(f?.metadata?.mimetype&&String(f.metadata.mimetype).toLowerCase().startsWith('video/'))||VIDEO_EXT.test(f?.name||'')}
+function mediaCollection(f){const parts=String(f?._path||f?.name||'').split('/').filter(Boolean);return parts.length>2?parts[1]:'unsorted'}
+async function listMediaFolder(prefix,depth=0){
+  if(depth>4)return[];
+  const{data,error}=await db.storage.from(BUCKET).list(prefix,{sortBy:{column:'created_at',order:'desc'},limit:1000});
+  if(error)throw error;
+  const out=[];
+  for(const item of (data||[])){
+    if(!item.name||item.name==='.emptyFolderPlaceholder')continue;
+    const itemPath=prefix+'/'+item.name;
+    const looksLikeFolder=!item.id&&!item.metadata;
+    if(looksLikeFolder){
+      out.push(...await listMediaFolder(itemPath,depth+1));
+    }else{
+      out.push({...item,_path:itemPath});
+    }
+  }
+  return out;
+}
+async function loadMedia(){
+  try{MEDIA=await listMediaFolder('uploads')}catch(error){toast('Media library error: '+error.message,'err');MEDIA=[]}
+  MEDIA_PAGE=0;populateMediaCollections();renderMedia()
+}
+function populateMediaCollections(){
+  const sel=document.getElementById('mediaCollection');if(!sel)return;
+  const current=sel.value||'all';const found=new Set();MEDIA.forEach(f=>{const c=mediaCollection(f);if(c!=='unsorted')found.add(c)});
+  [...found].forEach(c=>{if(![...sel.options].some(o=>o.value===c)){const o=document.createElement('option');o.value=c;o.textContent=c.replace(/[-_]/g,' ').replace(/\b\w/g,m=>m.toUpperCase());sel.appendChild(o)}});
+  sel.value=[...sel.options].some(o=>o.value===current)?current:'all';
+}
+function getFilteredMedia(){
+  const search=MEDIA_SEARCH.toLowerCase(),type=document.getElementById('mediaFilter')?.value||'all',collection=document.getElementById('mediaCollection')?.value||'all';
+  return MEDIA.filter(f=>{const name=String(f.name||''),nameMatch=!search||name.toLowerCase().includes(search),isVid=isVideoFile(f),typeMatch=type==='all'||(type==='video'&&isVid)||(type==='image'&&!isVid),collectionMatch=collection==='all'||(collection==='unsorted'&&mediaCollection(f)==='unsorted')||(collection!=='unsorted'&&mediaCollection(f)===collection);return nameMatch&&typeMatch&&collectionMatch})
+}
+function mediaSearchChanged(){MEDIA_SEARCH=document.getElementById('mediaSearch').value;MEDIA_PAGE=0;renderMedia()}
+function mediaFilterChanged(){MEDIA_PAGE=0;renderMedia()}
+function mediaCollectionChanged(){MEDIA_PAGE=0;renderMedia()}
+function renderMedia(){
+  const filtered=getFilteredMedia(),totalPages=Math.ceil(filtered.length/MEDIA_PER_PAGE),start=MEDIA_PAGE*MEDIA_PER_PAGE,slice=filtered.slice(start,start+MEDIA_PER_PAGE),g=document.getElementById('mgrid');
+  const countEl=document.getElementById('mediaCount');if(countEl)countEl.textContent=filtered.length+' file'+(filtered.length!==1?'s':'')+(filtered.length?' · showing '+(start+1)+'–'+Math.min(start+MEDIA_PER_PAGE,filtered.length):'');
+  if(!filtered.length){g.innerHTML='<div class="empty2" style="grid-column:1/-1">'+(MEDIA_SEARCH?'No files matching "'+escapeHtml(MEDIA_SEARCH)+'"':'No media yet — upload your first file above.')+'</div>';document.getElementById('mediaPagination').innerHTML='';return}
+  g.innerHTML=slice.map(f=>{const{data:{publicUrl}}=db.storage.from(BUCKET).getPublicUrl(f._path||('uploads/'+f.name)),isVid=isVideoFile(f),shortName=f.name.length>28?f.name.substring(0,25)+'...':f.name,collection=mediaCollection(f);return `<div class="mcard">${isVid?`<video src="${escapeAttr(publicUrl)}" muted controls preload="metadata"></video>`:`<img src="${escapeAttr(publicUrl)}" loading="lazy" alt=""/>`}<div class="mcard-ft"><div class="mcard-name" title="${escapeAttr(f.name)}">${escapeHtml(shortName)}</div><span class="collection-badge">${escapeHtml(collection==='unsorted'?'Unsorted':(COLLECTIONS[collection]||collection.replace(/[-_]/g,' ')))}</span><div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem"><button class="btn bg bs" onclick="copyUrl(this.dataset.url)" data-url="${escapeAttr(publicUrl)}">Copy URL</button><button class="btn bg bs" onclick="useAsCover(this.dataset.url)" data-url="${escapeAttr(publicUrl)}">Use as Cover</button><button class="btn bd bs" onclick="delMedia(this.dataset.path,this.dataset.name)" data-path="${escapeAttr(f._path||('uploads/'+f.name))}" data-name="${escapeAttr(f.name)}">Del</button></div></div></div>`}).join('');
+  const pg=document.getElementById('mediaPagination');if(totalPages<=1){pg.innerHTML='';return}
+  let btns='<button onclick="goMediaPage('+(MEDIA_PAGE-1)+')" '+(MEDIA_PAGE===0?'disabled':'')+' class="btn bg bs">← Prev</button>';
+  const range=[];for(let i=0;i<totalPages;i++){if(i===0||i===totalPages-1||Math.abs(i-MEDIA_PAGE)<=2)range.push(i);else if(range[range.length-1]!=='...')range.push('...')}
+  range.forEach(i=>{if(i==='...')btns+='<span style="padding:.5rem .4rem;color:var(--g400)">…</span>';else{const active=i===MEDIA_PAGE;btns+=`<button onclick="goMediaPage(${i})" class="btn ${active?'bp':'bg'} bs">${i+1}</button>`}});
+  btns+='<button onclick="goMediaPage('+(MEDIA_PAGE+1)+')" '+(MEDIA_PAGE===totalPages-1?'disabled':'')+' class="btn bg bs">Next →</button>';pg.innerHTML=btns
+}
+function goMediaPage(n){const totalPages=Math.ceil(getFilteredMedia().length/MEDIA_PER_PAGE);if(n<0||n>=totalPages)return;MEDIA_PAGE=n;renderMedia();document.getElementById('mgrid').scrollIntoView({behavior:'smooth',block:'start'})}
+async function uploadFiles(files){
+  if(!files||!files.length)return;
+  const pb=document.getElementById('pb'),pf=document.getElementById('pf'),collection=document.getElementById('uploadCollection')?.value||'unsorted';
+  pb.style.display='block';let done=0;
+  for(const file of files){
+    const name=`${Date.now()}-${Math.random().toString(36).slice(2,7)}-${file.name.replace(/\s+/g,'-')}`,path=collection==='unsorted'?`uploads/${name}`:`uploads/${collection}/${name}`;
+    const{error}=await db.storage.from(BUCKET).upload(path,file,{upsert:false});
+    if(error)toast('Upload failed: '+error.message,'err');else{done++;toast('Uploaded: '+file.name,'ok')}
+    pf.style.width=`${done/files.length*100}%`;
+  }
+  setTimeout(()=>{pb.style.display='none';pf.style.width='0%'},800);document.getElementById('ufi').value='';await loadMedia();updateDash()
+}
+async function delMedia(path,name){if(!confirm('Delete '+(name||path)+'?'))return;const{error}=await db.storage.from(BUCKET).remove([path]);if(error){toast('Delete error: '+error.message,'err');return}toast('File deleted');await loadMedia();updateDash()}
+function copyUrl(url){navigator.clipboard.writeText(url).then(()=>toast('URL copied!','ok')).catch(()=>prompt('Copy this URL:',url))}
+function useAsCover(url){
+  openProjModal();
+  document.getElementById('pCI').value=url;
+  updateImagePreview('pCI','pCoverPreview');
+  toast('Image added as cover — finish the project and save','ok');
+}
+const udz=document.getElementById('udz');udz.addEventListener('dragover',e=>{e.preventDefault();udz.classList.add('drag')});udz.addEventListener('dragleave',()=>udz.classList.remove('drag'));udz.addEventListener('drop',e=>{e.preventDefault();udz.classList.remove('drag');uploadFiles(e.dataTransfer.files)});
+
+/* ── DASHBOARD ─────────────────── */
+function updateDash(){document.getElementById('dProj').textContent=PROJECTS.length;document.getElementById('dSlides').textContent=SLIDES.length;document.getElementById('dMedia').textContent=MEDIA.length;document.getElementById('dCats').textContent=new Set(PROJECTS.flatMap(p=>getTags(p))).size}
+
+/* ── MODALS ────────────────────── */
+/* IMPORTANT: clicking outside NEVER closes the modal. */
+function closeM(id,force=false){
+  if(!force&&hasUnsavedChanges(id)){
+    const discard=confirm('Discard changes?\n\nYou have unsaved changes. Are you sure you want to close?');
+    if(!discard)return;
+  }
+  document.getElementById(id).classList.remove('open');delete MODAL_SNAPSHOT[id]
+}
+
+/* ── BROWSER CLOSE PROTECTION ──── */
+window.addEventListener('beforeunload',e=>{
+  const projectOpen=document.getElementById('mProj').classList.contains('open');
+  const slideOpen=document.getElementById('mSlide').classList.contains('open');
+  if((projectOpen&&hasUnsavedChanges('mProj'))||(slideOpen&&hasUnsavedChanges('mSlide'))){e.preventDefault();e.returnValue=''}
+});
+
+/* ── KEYBOARD SHORTCUT ─────────── */
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='s'){
+    const projectOpen=document.getElementById('mProj').classList.contains('open');
+    const slideOpen=document.getElementById('mSlide').classList.contains('open');
+    if(projectOpen||slideOpen){e.preventDefault();if(projectOpen)saveProj();else if(slideOpen)saveSlide()}
+  }
+});
+
+/* ── HELPERS ───────────────────── */
+function escapeHtml(str){return String(str??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function escapeAttr(str){return escapeHtml(str)}
+
+/* ── TOAST ─────────────────────── */
+function toast(msg,type=''){const t=document.createElement('div');t.className='toast '+(type==='ok'?'ok':type==='err'?'err':'');t.textContent=msg;document.getElementById('TOAST').appendChild(t);setTimeout(()=>t.remove(),3200)}
+</script>
+</body>
+</html>
